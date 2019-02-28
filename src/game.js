@@ -3,9 +3,7 @@
 
 // Especifica lo que se debe pintar al cargar el juego
 var startGame = function() {
-  Game.setBoard(0,new TitleScreen("Alien Invasion", 
-                                  "Press fire to start playing",
-                                  playGame));
+  Game.setBoard(0,new frogBackground(playGame));
 }
 
 

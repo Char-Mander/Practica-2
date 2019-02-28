@@ -1,12 +1,12 @@
 var sprites = {
- ship: { sx: 0, sy: 0, w: 38, h: 43, frames: 3 },
- missile: { sx: 0, sy: 42, w: 7, h: 20, frames: 1 },
- enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
- enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
- enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
+ car1: { sx: 0, sy: 0, w: 38, h: 43, frames: 3 },
+ car2: { sx: 0, sy: 42, w: 7, h: 20, frames: 1 },
+ car3: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
+ truck1: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
+ truck2: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
  enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
  explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
-
+ background: { sx: 0, sy: 0, w: 550, h: 625, frames: 1 }
 };
 
 var OBJECT_PLAYER = 1,
@@ -221,21 +221,21 @@ var Starfield = function(speed,opacity,numStars,clear) {
 
   // If the clear option is set, 
   // make the background black instead of transparent
-  if(clear) {
+  /*if(clear) {
     starCtx.fillStyle = "#000";
     starCtx.fillRect(0,0,stars.width,stars.height);
-  }
+  }*/
 
   // Now draw a bunch of random 2 pixel
   // rectangles onto the offscreen canvas
-  starCtx.fillStyle = "#FFF";
+  /*starCtx.fillStyle = "#FFF";
   starCtx.globalAlpha = opacity;
   for(var i=0;i<numStars;i++) {
     starCtx.fillRect(Math.floor(Math.random()*stars.width),
                      Math.floor(Math.random()*stars.height),
                      2,
                      2);
-  }
+  }*/
 
   // This method is called every frame
   // to draw the starfield onto the canvas
@@ -270,3 +270,15 @@ var Starfield = function(speed,opacity,numStars,clear) {
   }
 }
 
+var frogBackground = function(callback){
+  var background = document.createElement("canvas");
+  background.width = Game.width; 
+  background.height = Game.height;
+  var backgroundCtx = background.getContext("2d");
+  var offset = 0; 
+  backgroundCtx.drawImage('background');
+//  this.setup('background', {frame: 0});
+
+}
+
+frogBackground.prototype = new Sprite();
