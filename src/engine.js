@@ -12,7 +12,7 @@ var Game = new function() {
     if(!this.ctx) { 
       return alert("Please upgrade your browser to play"); }
 
-    this.setupInput();
+    //this.setupInput();
 
     //this.loop(); 
     //setInterval(this.loop, 1000/fps);
@@ -24,10 +24,10 @@ var Game = new function() {
 
 
   // le asignamos un nombre lógico a cada tecla que nos interesa
-  var KEY_CODES = { 37:'left', 39:'right', 32 :'fire' };
+  var KEY_CODES = { 37:'left', 38: 'up', 39:'right', 40: 'down'};
 
   this.keys = {};
-
+/*
   this.setupInput = function() {
     window.addEventListener('keydown',function(e) {
       if(KEY_CODES[e.keyCode]) {
@@ -43,7 +43,7 @@ var Game = new function() {
       }
     },false);
   }
-
+*/
 
   var boards = [];
 
@@ -166,8 +166,8 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
   var up = false;
 
   this.step = function(dt) {
-    if( ! Game.keys['fire'] ) up = true;
-    if( up && Game.keys['fire'] && callback ) callback();
+    //if( ! Game.keys['fire'] ) up = true;
+    if( up /*&& Game.keys['fire']*/ && callback ) callback();
   };
 
   this.draw = function(ctx) {
