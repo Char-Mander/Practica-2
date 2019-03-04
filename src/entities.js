@@ -275,8 +275,13 @@ var frogBackground = function(callback){
   background.width = Game.width; 
   background.height = Game.height;
   var backgroundCtx = background.getContext("2d");
-  var offset = 0; 
-  backgroundCtx.drawImage('background');
+  //var offset = 0; 
+  //backgroundCtx.drawImage('background');
+  backgroundCtx.fillStyle = "#191970";
+  backgroundCtxt.fillRect(0, 0, 399, 229);
+  backgroundCtx.fillStyle = "#000000";
+  backgroundCtx.fillRect(0, 229, 399, 228);
+  backgroundCtx.drawImage('background', 0, 0, 399, 113, 0, -55, 399, 113);
 //  this.setup('background', {frame: 0});
 
 }
