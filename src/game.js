@@ -1,14 +1,11 @@
-
-
-
+/*
 // Especifica lo que se debe pintar al cargar el juego
 var startGame = function() {
-  Game.setBoard(0,new TitleScreen("Alien Invasion", 
+  Game.setBoard(0,new TitleScreen("Frogger", 
                                   "Press fire to start playing",
                                   playGame));
 }
-
-
+*/
 
 var playGame = function() {
 
@@ -16,10 +13,10 @@ var playGame = function() {
   Game.setBoard(1,new Starfield(50,0.6,100))
   Game.setBoard(2,new Starfield(100,1.0,50));
 
-  var board = new GameBoard();
-  board.add(new PlayerShip());
-  board.add(new Level(level1,winGame));
+  var board =new Background();
+  //board.add(new Level(level1,winGame));
   Game.setBoard(3,board);
+  
 }
 
 var winGame = function() {
@@ -42,5 +39,5 @@ var loseGame = function() {
 // y este después de realizar la inicialización llamará a
 // startGame
 window.addEventListener("load", function() {
-  Game.initialize("game",sprites,startGame);
+  Game.initialize("game",sprites,playGame);
 });

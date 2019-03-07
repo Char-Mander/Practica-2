@@ -1,19 +1,43 @@
 var sprites = {
- ship: { sx: 0, sy: 0, w: 38, h: 43, frames: 3 },
- missile: { sx: 0, sy: 42, w: 7, h: 20, frames: 1 },
- enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
- enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
- enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
- enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
- explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
+ blue_car: { sx: 8, sy: 6, w: 90, h: 49, frames: 1 },
+ green_car: { sx: 108, sy: 4, w: 95, h: 51, frames: 1 },
+ yellow_car: { sx: 213, sy: 6, w: 95, h: 49, frames: 1 },
 
+ white_van: { sx: 6, sy: 62, w: 125, h: 46, frames: 1 },
+ brown_van: { sx: 148, sy: 62, w: 199, h: 47, frames: 1 },
+
+ yellow_skull: { sx: 211, sy: 128, w: 46, h: 35, frames: 1 },
+ orange_skull: { sx: 259, sy: 128, w: 46, h: 35, frames: 1 },
+ grey_skull: { sx: 307, sy: 128, w: 46, h: 35, frames: 1 },
+ green_skull: { sx: 355, sy: 128, w: 46, h: 35, frames: 1 },
+
+ medium_wood: { sx: 9, sy: 122, w: 191, h: 41, frames: 1 },
+ large_wood: { sx: 9, sy: 171, w: 248, h: 191, frames: 1 },
+ small_wood: { sx: 270, sy: 171, w: 131, h: 191, frames: 1 },
+
+ leaf: { sx: 4, sy: 234, w: 44, h: 40, frames: 1 },
+ fly: { sx: 58, sy: 239, w: 31, h: 34, frames: 1 },
+
+ green_floor: { sx: 95, sy: 225, w: 58, h: 57, frames: 1 },
+ blue_floor: { sx: 158, sy: 225, w: 58, h: 57, frames: 1 },
+ black_floor: { sx: 221, sy: 225, w: 58, h: 57, frames: 1 },
+ grass_floor: { sx: 284, sy: 225, w: 58, h: 57, frames: 1 },
+ leaf_floor: { sx: 348, sy: 225, w: 58, h: 57, frames: 1 },
+
+ turtle_dive: { sx: 5, sy: 288, w: 50, h: 47, frames: 9 },
+ frog_move: { sx: 0, sy: 39, w: 38, h: 53, frames: 7 },
+ turtle: { sx: 281, sy: 344, w: 49, h: 43, frames: 2 },
+
+ title: { sx: 8, sy: 395, w: 261, h: 164, frames: 1 },
+ background: { sx: 421, sy: 0, w: 550, h: 625, frames: 1},
 };
 
 var OBJECT_PLAYER = 1,
     OBJECT_PLAYER_PROJECTILE = 2,
     OBJECT_ENEMY = 4,
     OBJECT_ENEMY_PROJECTILE = 8,
-    OBJECT_POWERUP = 16;
+    OBJECT_POWERUP = 16,
+    OBJECT_BACKGROUND = 32;
 
 
 /// CLASE PADRE SPRITE
@@ -43,6 +67,15 @@ Sprite.prototype.hit = function(damage) {
   this.board.remove(this);
 }
 
+
+var Background = function(){
+    this.setup('background', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 0 });
+    this.x = 0;
+    this.y = 0;
+}
+  Background.prototype = new Sprite();
+  Background.prototype.type = OBJECT_BACKGROUND;
+Background.prototype.step = function(){};
 
 
 // PLAYER
@@ -217,6 +250,7 @@ var Starfield = function(speed,opacity,numStars,clear) {
   stars.height = Game.height;
   var starCtx = stars.getContext("2d");
 
+  
   var offset = 0;
 
   // If the clear option is set, 
@@ -268,5 +302,6 @@ var Starfield = function(speed,opacity,numStars,clear) {
     offset += dt * speed;
     offset = offset % stars.height;
   }
+  
 }
 
