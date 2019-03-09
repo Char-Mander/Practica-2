@@ -34,7 +34,7 @@ var sprites = {
 
 var OBJECT_PLAYER = 1,
   OBJECT_PLAYER_PROJECTILE = 2,
-  OBJECT_ENEMY = 4,
+  OBJECT_CAR = 4,
   OBJECT_ENEMY_PROJECTILE = 8,
   OBJECT_POWERUP = 16,
   OBJECT_BACKGROUND = 32;
@@ -127,38 +127,23 @@ var Player = function () {
       this.y += this.vy * dt;
     }
 
-    /* if(Game.keys['left']) { 
-       this.vx = -this.maxVel; 
-       this.x += this.vx + 50; 
+   
+    if (this.x < 0) { 
+      this.x = 0; 
+      this.subFrame = 0;
     }
-     else if(Game.keys['right']) { 
-       this.vx = this.maxVel; 
-       this.x += this.vx + 50;  
-    }
-     else if(Game.keys['down']) { 
-       this.vy = -this.maxVel;
-       this.y += this.vy + 47;
-    }
-     else if(Game.keys['up']) { 
-       this.vy = this.maxVel; 
-       this.y += this.vy + 47;
-    }
-     else { 
-       this.vx = 0; 
-       this.vy = 0;
-      }*/
-
-    /* this.x += this.vx * dt;
-     this.y += this.vy * dt;
-*/
-    if (this.x < 0) { this.x = 0; }
     else if (this.x > Game.width - this.w) {
-      this.x = Game.width - this.w
+      this.x = Game.width - this.w;
+      this.subFrame = 0;
     }
 
-    if (this.y < 0) { this.y = 0; }
+    if (this.y < 0) { 
+      this.y = 0; 
+      this.subFrame = 0;
+    }
     else if (this.y > Game.height - this.h) {
       this.y = Game.height - this.h;
+      this.subFrame = 0;
     }
 
     this.reload -= dt;
@@ -181,7 +166,7 @@ Player.prototype.hit = function (damage) {
     loseGame();
   }
 }
-
+/*
 
 ///// EXPLOSION
 
@@ -200,7 +185,7 @@ Explosion.prototype.step = function (dt) {
     this.board.remove(this);
   }
 };
-
+*/
 
 
 /// Player Missile
@@ -220,7 +205,7 @@ PlayerMissile.prototype.step = function (dt) {
   this.y += this.vy * dt;
   if (this.y < -this.h) { this.board.remove(this); }
 
-  var collision = this.board.collide(this, OBJECT_ENEMY);
+  var collision = this.board.collide(this, OBJECT_CAR);
   if (collision) {
     collision.hit(this.damage);
     this.board.remove(this);
@@ -233,9 +218,9 @@ PlayerMissile.prototype.step = function (dt) {
 
 
 
-/// ENEMIES
+/// Cars
 
-var enemies = {
+var cars = {
   straight: {
     x: 0, y: -50, sprite: 'enemy_ship', health: 10,
     E: 100
@@ -259,23 +244,23 @@ var enemies = {
 };
 
 
-var Enemy = function (blueprint, override) {
+var Car = function (blueprint, override) {
   this.merge(this.baseParameters);
   this.setup(blueprint.sprite, blueprint);
   this.merge(override);
 }
 
-Enemy.prototype = new Sprite();
-Enemy.prototype.baseParameters = {
+Car.prototype = new Sprite();
+Car.prototype.baseParameters = {
   A: 0, B: 0, C: 0, D: 0,
   E: 0, F: 0, G: 0, H: 0,
   t: 0, health: 20, damage: 10
 };
 
 
-Enemy.prototype.type = OBJECT_ENEMY;
+Car.prototype.type = OBJECT_CAR;
 
-Enemy.prototype.step = function (dt) {
+Car.prototype.step = function (dt) {
   this.t += dt;
   this.vx = this.A + this.B * Math.sin(this.C * this.t + this.D);
   this.vy = this.E + this.F * Math.sin(this.G * this.t + this.H);
@@ -295,7 +280,7 @@ Enemy.prototype.step = function (dt) {
 
 }
 
-Enemy.prototype.hit = function (damage) {
+Car.prototype.hit = function (damage) {
   this.health -= damage;
   if (this.health <= 0) {
     if (this.board.remove(this)) {
