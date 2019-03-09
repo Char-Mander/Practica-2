@@ -82,7 +82,7 @@ Background.prototype.step = function(){};
 
 var PlayerShip = function() { 
 
-  this.setup('ship', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
+  this.setup('frog_move', { vx: 0, vy: 30, frame: 0, reloadTime: 0.25, maxVel: 200 });
 
    this.x = Game.width/2 - this.w / 2;
    this.y = Game.height - 10 - this.h;
@@ -93,7 +93,12 @@ var PlayerShip = function() {
    this.step = function(dt) {
      if(Game.keys['left']) { this.vx = -this.maxVel; }
      else if(Game.keys['right']) { this.vx = this.maxVel; }
-     else { this.vx = 0; }
+     else if(Game.keys['down']) { this.vy = -this.maxVel; }
+     else if(Game.keys['up']) { this.vy = this.maxVel; }
+     else { 
+       this.vx = 0; 
+       this.vy = 0;
+      }
 
      this.x += this.vx * dt;
 
@@ -103,13 +108,13 @@ var PlayerShip = function() {
      }
 
     this.reload-=dt;
-    if(Game.keys['fire'] && this.reload < 0) {
+    /*if(Game.keys['fire'] && this.reload < 0) {
       Game.keys['fire'] = false;
       this.reload = this.reloadTime;
 
       this.board.add(new PlayerMissile(this.x,this.y+this.h/2));
       this.board.add(new PlayerMissile(this.x+this.w,this.y+this.h/2));
-    }
+    }*/
 
    }
 
