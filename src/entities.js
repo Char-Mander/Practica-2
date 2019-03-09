@@ -87,6 +87,27 @@ var Player = function () {
   this.reload = this.reloadTime;
   this.subFrame = 0;
 
+  //MOVIMIENTO RANA CASILLA A CASILLA
+  /*if (Game.keys['left']) {
+    console.log("HOLA");
+      this.vx = -this.maxVel;
+      this.x -= 40; 
+  } else if (Game.keys['right']) {
+      this.vx = this.maxVel;
+      this.x += 40;
+  } else if (Game.keys['up']) {
+      this.vy = -this.maxVel;
+      this.y -= 40;
+  } else if (Game.keys['down']) {
+      this.vy = this.maxVel;
+      this.y += 40;
+  } else {
+      this.vx = 0;
+      this.vy = 0;
+  }
+
+*/
+
   this.step = function (dt) {
     if (Game.keys['left']) {
       this.vx = -this.maxVel;
