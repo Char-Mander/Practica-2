@@ -16,7 +16,7 @@ var playGame = function() {
   var board = new Background();
   //board.add(new Level(level1,winGame));
   Game.setBoard(0,board);
-  Game.setBoard(1, new PlayerShip());
+  Game.setBoard(1, new Player());
   
 }
 
