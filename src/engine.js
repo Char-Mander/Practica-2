@@ -23,14 +23,13 @@ var Game = new function() {
   };
 
 
-  // le asignamos un nombre lógico a cada tecla que nos interesaWWWWWWWWWW
-  var KEY_CODES = { 37:'left', 38: 'up', 39:'right', 40 :'down' };
-  
+  // le asignamos un nombre lógico a cada tecla que nos interesa
+  var KEY_CODES = { 37:'left', 38: 'down', 39:'right', 40 :'up' };
 
   this.keys = {};
 
   this.setupInput = function() {
-   /* window.addEventListener('keydown',function(e) {
+    window.addEventListener('keydown',function(e) {
       if(KEY_CODES[e.keyCode]) {
        Game.keys[KEY_CODES[e.keyCode]] = true;
        e.preventDefault();
@@ -42,7 +41,7 @@ var Game = new function() {
        Game.keys[KEY_CODES[e.keyCode]] = false; 
        e.preventDefault();
       }
-    },false);*/
+    },false);
   }
 
 
