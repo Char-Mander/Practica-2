@@ -87,28 +87,61 @@ var Player = function () {
   this.reload = this.reloadTime;
   this.subFrame = 0;
 
-  //MOVIMIENTO RANA CASILLA A CASILLA
-  /*if (Game.keys['left']) {
-    console.log("HOLA");
-      this.vx = -this.maxVel;
-      this.x -= 40; 
-  } else if (Game.keys['right']) {
-      this.vx = this.maxVel;
-      this.x += 40;
-  } else if (Game.keys['up']) {
-      this.vy = -this.maxVel;
-      this.y -= 40;
-  } else if (Game.keys['down']) {
-      this.vy = this.maxVel;
-      this.y += 40;
-  } else {
-      this.vx = 0;
-      this.vy = 0;
-  }
-
-*/
-
   this.step = function (dt) {
+   /*  //MOVIMIENTO RANA CASILLA A CASILLA
+  var temp;
+  if (Game.keys['left']) {
+    temp = setInterval(() => {
+      () => {
+        this.frame = Math.floor(this.subFrame++ / 3);
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+          clearInterval(temp);
+        }
+      }
+    }, 500);
+    this.vx = -this.maxVel;
+    this.x -= 40;
+  } else if (Game.keys['right']) {
+    temp = setInterval(() => {
+      () => {
+        this.frame = Math.floor(this.subFrame++ / 3);
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+          clearInterval(temp);
+        }
+      }
+    }, 16);
+    this.vx = this.maxVel;
+    this.x += 40;
+  } else if (Game.keys['up']) {
+    temp = setInterval(() => {
+      () => {
+        this.frame = Math.floor(this.subFrame++ / 3);
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+          clearInterval(temp);
+        }
+      }
+    }, 16);
+    this.vy = -this.maxVel;
+    this.y += 40;
+  } else if (Game.keys['down']) {
+    temp = setInterval(() => {
+      () => {
+        this.frame = Math.floor(this.subFrame++ / 3);
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+          clearInterval(temp);
+        }
+      }
+    }, 16);
+    this.vy = this.maxVel;
+    this.y -= 40;
+  } else {
+    this.vx = 0;
+    this.vy = 0;
+  }*/
     if (Game.keys['left']) {
       this.vx = -this.maxVel;
       this.frame = Math.floor(this.subFrame++ / 3);
@@ -148,9 +181,9 @@ var Player = function () {
       this.y += this.vy * dt;
     }
 
-   
-    if (this.x < 0) { 
-      this.x = 0; 
+
+    if (this.x < 0) {
+      this.x = 0;
       this.subFrame = 0;
     }
     else if (this.x > Game.width - this.w) {
@@ -158,8 +191,8 @@ var Player = function () {
       this.subFrame = 0;
     }
 
-    if (this.y < 0) { 
-      this.y = 0; 
+    if (this.y < 0) {
+      this.y = 0;
       this.subFrame = 0;
     }
     else if (this.y > Game.height - this.h) {
