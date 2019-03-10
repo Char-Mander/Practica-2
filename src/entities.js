@@ -25,7 +25,7 @@ var sprites = {
  leaf_floor: { sx: 348, sy: 225, w: 58, h: 57, frames: 1 },
 
  turtle_dive: { sx: 5, sy: 288, w: 50, h: 47, frames: 9 },
- frog_move: { sx: 0, sy: 39, w: 38, h: 53, frames: 7 },
+ frog_move: { sx: 0, sy: 339, w: 38, h: 53, frames: 7 },
  turtle: { sx: 281, sy: 344, w: 49, h: 43, frames: 2 },
 
  title: { sx: 8, sy: 395, w: 261, h: 164, frames: 1 },
