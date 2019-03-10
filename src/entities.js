@@ -80,7 +80,7 @@ Background.prototype.step = function () { };
 // PLAYER
 
 var Player = function () {
-  this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 200, frame: 0 });
+  this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 150 });
 
   this.x = Game.width / 2 - this.w / 2;
   this.y = Game.height + this.h / 2;
@@ -201,13 +201,6 @@ var Player = function () {
     }
 
     this.reload -= dt;
-    /*if(Game.keys['fire'] && this.reload < 0) {
-      Game.keys['fire'] = false;
-      this.reload = this.reloadTime;
-
-      this.board.add(new PlayerMissile(this.x,this.y+this.h/2));
-      this.board.add(new PlayerMissile(this.x+this.w,this.y+this.h/2));
-    }*/
   }
 
 }
@@ -220,6 +213,7 @@ Player.prototype.hit = function (damage) {
     loseGame();
   }
 }
+
 /*
 
 ///// EXPLOSION
@@ -240,6 +234,21 @@ Explosion.prototype.step = function (dt) {
   }
 };
 */
+
+///// DEAD
+
+var Dead = function (centerX, centerY) {
+  this.setup('orange_skull', { frame: 0 });
+  this.x = centerX - this.w / 2;
+  this.y = centerY - this.h / 2;
+  this.subFrame = 0;
+};
+
+Dead.prototype = new Sprite();
+
+Dead.prototype.step = function (dt) {
+    //this.board.remove(this);
+};
 
 
 /// Player Missile
@@ -272,29 +281,19 @@ PlayerMissile.prototype.step = function (dt) {
 
 
 
-/// Cars
+/// CARs
 
 var cars = {
-  straight: {
-    x: 0, y: -50, sprite: 'enemy_ship', health: 10,
-    E: 100
-  },
-  ltr: {
-    x: 0, y: -100, sprite: 'enemy_purple', health: 10,
-    B: 200, C: 1, E: 200
-  },
-  circle: {
-    x: 400, y: -50, sprite: 'enemy_circle', health: 10,
-    A: 0, B: -200, C: 1, E: 20, F: 200, G: 1, H: Math.PI / 2
-  },
-  wiggle: {
-    x: 100, y: -50, sprite: 'enemy_bee', health: 20,
-    B: 100, C: 4, E: 100
-  },
-  step: {
-    x: 0, y: -50, sprite: 'enemy_circle', health: 10,
-    B: 300, C: 1.5, E: 60
-  }
+  straight: { x: 0,   y: -50, sprite: 'blue_car', health: 10, 
+              E: 100 },
+  ltr:      { x: 0,   y: -100, sprite: 'grey_skull', health: 10, 
+              B: 200, C: 1, E: 200  },
+  circle:   { x: 400,   y: -50, sprite: 'turtle', health: 10, 
+              A: 0,  B: -200, C: 1, E: 20, F: 200, G: 1, H: Math.PI/2 },
+  wiggle:   { x: 100, y: -50, sprite: 'green_car', health: 20, 
+              B: 100, C: 4, E: 100 },
+  step:     { x: 0,   y: -50, sprite: 'large_wood', health: 10,
+              B: 300, C: 1.5, E: 60 }
 };
 
 
@@ -338,7 +337,7 @@ Car.prototype.hit = function (damage) {
   this.health -= damage;
   if (this.health <= 0) {
     if (this.board.remove(this)) {
-      this.board.add(new Explosion(this.x + this.w / 2,
+      this.board.add(new Dead(this.x + this.w / 2,
         this.y + this.h / 2));
     }
   }
