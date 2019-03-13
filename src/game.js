@@ -12,9 +12,9 @@ var playGame = function() {
   var board = new GameBoard();
   Game.setBoard(0,new Background()); //Pantalla de juego
   board.add(new Player()); //Pantalla de juego
-  board.add(new Car(cars.straight, {x:100}));
-  board.add(new Car(cars.ltr, {x:200}));
-  board.add(new Car(cars.circle, {x:300}));
+  board.add(new Car(cars.cgreen, {x:100}));
+  board.add(new Car(cars.swood, {x:200}));
+  board.add(new Car(cars.cyellow, {x:300})); //Probar con esto que tenemos las dimensiones bien cogidas!!!!
 
   Game.setBoard(1,board);
   //Game.setBoard(2,new Level(level1,winGame)); //Crea el nivel con los enemigos  

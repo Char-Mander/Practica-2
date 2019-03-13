@@ -12,8 +12,8 @@ var sprites = {
   green_skull: { sx: 355, sy: 128, w: 46, h: 35, frames: 1 },
 
   medium_wood: { sx: 9, sy: 122, w: 191, h: 41, frames: 1 },
-  large_wood: { sx: 9, sy: 171, w: 248, h: 191, frames: 1 },
-  small_wood: { sx: 270, sy: 171, w: 131, h: 191, frames: 1 },
+  large_wood: { sx: 9, sy: 171, w: 248, h: 41, frames: 1 },
+  small_wood: { sx: 270, sy: 171, w: 131, h: 41, frames: 1 },
 
   leaf: { sx: 4, sy: 234, w: 44, h: 40, frames: 1 },
   fly: { sx: 58, sy: 239, w: 31, h: 34, frames: 1 },
@@ -284,15 +284,15 @@ PlayerMissile.prototype.step = function (dt) {
 /// CARs
 
 var cars = {
-  straight: { x: 0,   y: -50, sprite: 'blue_car', health: 10, 
+  cblue: { x: 0,   y: -50, sprite: 'blue_car', health: 10, 
               E: 100 },
-  ltr:      { x: 0,   y: -100, sprite: 'grey_skull', health: 10, 
+  cgreen:      { x: 0,   y: -100, sprite: 'green_car', health: 10, 
               B: 200, C: 1, E: 200  },
-  circle:   { x: 400,   y: -50, sprite: 'turtle', health: 10, 
+  cyellow:   { x: 400,   y: -50, sprite: 'yellow_car', health: 10, 
               A: 0,  B: -200, C: 1, E: 20, F: 200, G: 1, H: Math.PI/2 },
-  wiggle:   { x: 100, y: -50, sprite: 'green_car', health: 20, 
+  swood:   { x: 100, y: -50, sprite: 'small_wood', health: 20, 
               B: 100, C: 4, E: 100 },
-  step:     { x: 0,   y: -50, sprite: 'large_wood', health: 10,
+  lwood:     { x: 0,   y: -50, sprite: 'large_wood', health: 10,
               B: 300, C: 1.5, E: 60 }
 };
 
