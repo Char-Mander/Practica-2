@@ -284,24 +284,22 @@ PlayerMissile.prototype.step = function (dt) {
 /// CARs
 
 var cars = {
-  cblue: { x: 0,   y: -50, sprite: 'blue_car', health: 10, 
-              E: 100 },
-  cgreen:      { x: 0,   y: -100, sprite: 'green_car', health: 10, 
-              B: 200, C: 1, E: 200  },
-  cyellow:   { x: 400,   y: -50, sprite: 'yellow_car', health: 10, 
-              A: 0,  B: -200, C: 1, E: 20, F: 200, G: 1, H: Math.PI/2 },
-  swood:   { x: 100, y: -50, sprite: 'small_wood', health: 20, 
-              B: 100, C: 4, E: 100 },
-  lwood:     { x: 0,   y: -50, sprite: 'large_wood', health: 10,
-              B: 300, C: 1.5, E: 60 },
-
+    //E: movimiento vertical.
+    //A: movimiento horizontal
+   cblue:      { x: -50,   y: 435, sprite: 'blue_car', health: 10, A: 60 },
+              //Movimiento horizontal: x,y para posicion en background
+              // modificar A (signo de A, cambia el sentido iz,dr)
+  cgreen:      { x: -50,   y: 525, sprite: 'green_car', health: 10, A: 50 },
+  cyellow:   { x: 550,   y: 480, sprite: 'yellow_car', health: 10, A: -70},
+  swood:   { x: -50, y: 100, sprite: 'small_wood', health: 20, A: 70},
+  mwood:     { x: 550,   y: 50, sprite: 'medium_wood', health: 10, A:-50},
+  lwood:     { x: -50,   y: 150, sprite: 'large_wood', health: 10, A:60},
+  vwhite: { x: 550,   y: 335, sprite: 'white_van', health: 10, A: -50 },              
+  vbrown: { x: -50,   y: 385, sprite: 'brown_van', health: 10, A: 50},
   //Van recto            
   titulo: { x: 0,   y: -50, sprite: 'title', health: 10, 
               E: 100 },
-  vwhite: { x: 0,   y: -50, sprite: 'white_van', health: 10, 
-              E: 100 },              
-  vbrown: { x: 0,   y: -50, sprite: 'brown_van', health: 10, 
-              E: 100 },
+ 
   hoja: { x: 0,   y: -50, sprite: 'leaf', health: 10, 
               E: 100 },
   mosca: { x: 0,   y: -50, sprite: 'fly', health: 10, 
