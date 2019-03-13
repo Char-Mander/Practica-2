@@ -14,7 +14,15 @@ var playGame = function() {
   board.add(new Player()); //Pantalla de juego
   board.add(new Car(cars.cgreen, {x:100}));
   board.add(new Car(cars.swood, {x:200}));
-  board.add(new Car(cars.cyellow, {x:300})); //Probar con esto que tenemos las dimensiones bien cogidas!!!!
+  board.add(new Car(cars.cyellow, {x:300}));
+
+/*
+//Pruebas
+  board.add(new Car(cars.floor, {x:150}));
+  board.add(new Car(cars.mosca, {x:250}));
+  board.add(new Car(cars.turtle_, {x:350}));
+*/
+
 
   Game.setBoard(1,board);
   //Game.setBoard(2,new Level(level1,winGame)); //Crea el nivel con los enemigos  

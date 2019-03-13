@@ -293,7 +293,25 @@ var cars = {
   swood:   { x: 100, y: -50, sprite: 'small_wood', health: 20, 
               B: 100, C: 4, E: 100 },
   lwood:     { x: 0,   y: -50, sprite: 'large_wood', health: 10,
-              B: 300, C: 1.5, E: 60 }
+              B: 300, C: 1.5, E: 60 },
+
+  //Van recto            
+  titulo: { x: 0,   y: -50, sprite: 'title', health: 10, 
+              E: 100 },
+  vwhite: { x: 0,   y: -50, sprite: 'white_van', health: 10, 
+              E: 100 },              
+  vbrown: { x: 0,   y: -50, sprite: 'brown_van', health: 10, 
+              E: 100 },
+  hoja: { x: 0,   y: -50, sprite: 'leaf', health: 10, 
+              E: 100 },
+  mosca: { x: 0,   y: -50, sprite: 'fly', health: 10, 
+              E: 100 },              
+  skull: { x: 0,   y: -50, sprite: 'green_skull', health: 10, 
+              E: 100 },   //Con este cambias el nombre 'orange..' y se prueban todas           
+floor: { x: 0,   y: -50, sprite: 'leaf_floor', health: 10, 
+              E: 100 },
+  turtle_ : { x: 0,   y: -50, sprite: 'turtle', health: 10, 
+              E: 100 }
 };
 
 
