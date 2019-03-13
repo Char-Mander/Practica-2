@@ -24,7 +24,7 @@ var Game = new function() {
 
 
   // le asignamos un nombre lógico a cada tecla que nos interesa
-  var KEY_CODES = { 37:'left', 38: 'down', 39:'right', 40 :'up' };
+  var KEY_CODES = { 37:'left', 38: 'down', 39:'right', 40 :'up' , 32 : 'fire' };
 
   this.keys = {};
 
@@ -272,5 +272,3 @@ var GameBoard = function() {
     });
   };
 }
-
-

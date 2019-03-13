@@ -37,7 +37,8 @@ var OBJECT_PLAYER = 1,
   OBJECT_CAR = 4,
   OBJECT_ENEMY_PROJECTILE = 8,
   OBJECT_POWERUP = 16,
-  OBJECT_BACKGROUND = 32;
+  OBJECT_BACKGROUND = 32,
+  OBJECT_TRUNK = 64;
 
 
 /// CLASE PADRE SPRITE
@@ -86,6 +87,11 @@ var Player = function () {
   this.y = Game.height + this.h / 2;
   this.reload = this.reloadTime;
   this.subFrame = 0;
+
+  //Metodo que mantiene a la rana encima del tronco
+  this.onTrunk = function(vt){
+  	this.x += vt;
+  }
 
   this.step = function (dt) {
    /*  //MOVIMIENTO RANA CASILLA A CASILLA
@@ -280,36 +286,15 @@ PlayerMissile.prototype.step = function (dt) {
 };
 
 
-
 /// CARs
-
-var cars = {
     //E: movimiento vertical.
     //A: movimiento horizontal
-   cblue:      { x: -50,   y: 435, sprite: 'blue_car', health: 10, A: 60 },
-              //Movimiento horizontal: x,y para posicion en background
-              // modificar A (signo de A, cambia el sentido iz,dr)
-  cgreen:      { x: -50,   y: 525, sprite: 'green_car', health: 10, A: 50 },
-  cyellow:   { x: 550,   y: 480, sprite: 'yellow_car', health: 10, A: -70},
-  swood:   { x: -50, y: 100, sprite: 'small_wood', health: 20, A: 70},
-  mwood:     { x: 550,   y: 50, sprite: 'medium_wood', health: 10, A:-50},
-  lwood:     { x: -50,   y: 150, sprite: 'large_wood', health: 10, A:60},
-  vwhite: { x: 550,   y: 335, sprite: 'white_van', health: 10, A: -50 },              
-  vbrown: { x: -50,   y: 385, sprite: 'brown_van', health: 10, A: 50},
-  //Van recto            
-  titulo: { x: 0,   y: -50, sprite: 'title', health: 10, 
-              E: 100 },
- 
-  hoja: { x: 0,   y: -50, sprite: 'leaf', health: 10, 
-              E: 100 },
-  mosca: { x: 0,   y: -50, sprite: 'fly', health: 10, 
-              E: 100 },              
-  skull: { x: 0,   y: -50, sprite: 'green_skull', health: 10, 
-              E: 100 },   //Con este cambias el nombre 'orange..' y se prueban todas           
-floor: { x: 0,   y: -50, sprite: 'leaf_floor', health: 10, 
-              E: 100 },
-  turtle_ : { x: 0,   y: -50, sprite: 'turtle', health: 10, 
-              E: 100 }
+var cars = {
+  cblue:     { x: -50,   y: 435, sprite: 'blue_car', health: 10, A: 60 },
+  cgreen:    { x: -50,   y: 385, sprite: 'green_car', health: 10, A: 50 },
+  cyellow:   { x: -50,   y: 335, sprite: 'yellow_car', health: 10, A: 70},
+  vwhite: { x: -50,   y: 480, sprite: 'white_van', health: 10, A: 50 },              
+  vbrown: { x: 550,   y: 525, sprite: 'brown_van', health: 10, A: -50}
 };
 
 
@@ -350,6 +335,65 @@ Car.prototype.step = function (dt) {
 }
 
 Car.prototype.hit = function (damage) {
+  this.health -= damage;
+  if (this.health <= 0) {
+    if (this.board.remove(this)) {
+      this.board.add(new Dead(this.x + this.w / 2,
+        this.y + this.h / 2));
+    }
+  }
+}
+
+/// TRUNK (TRONCOS)
+    //A: movimiento horizontal
+var trunks = {
+  swood:  { x: 0, y: 250, sprite: 'small_wood', health: 20, A: 70},
+  mwood:  { x: 550,   y: 50, sprite: 'medium_wood', health: 10, A:-50},
+  lwood:  { x: 0,   y: 150, sprite: 'large_wood', health: 10, A:60},
+  turtle1: { x: 0,   y: 200, sprite: 'turtle', health: 10, A:40},
+  turtle2: { x: 0,   y: 100, sprite: 'turtle', health: 10, A:60}
+
+};
+
+
+var Trunk = function (blueprint, override) {
+  this.merge(this.baseParameters);
+  this.setup(blueprint.sprite, blueprint);
+  this.merge(override);
+}
+
+Trunk.prototype = new Sprite();
+Trunk.prototype.baseParameters = {
+  A: 0, B: 0, C: 0, D: 0,
+  E: 0, F: 0, G: 0, H: 0,
+  t: 0, health: 20, damage: 10
+};
+
+
+Trunk.prototype.type = OBJECT_TRUNK;
+
+Trunk.prototype.step = function (dt) {
+  this.t += dt;
+  this.vx = this.A + this.B * Math.sin(this.C * this.t + this.D);
+  this.vy = this.E + this.F * Math.sin(this.G * this.t + this.H);
+  this.x += this.vx * dt;
+  this.y += this.vy * dt;
+  if (this.y > Game.height ||
+    this.x < -this.w ||
+    this.x > Game.width) {
+    this.board.remove(this);
+  }
+
+  var collision = this.board.collide(this, OBJECT_PLAYER);
+  if (collision) {
+  	 var player = new Player();
+  	 player.onTrunk(dt); //No se actualiza
+  }
+
+}
+
+//Seria move en todo caso, para que se mueva a la vez que el tronco
+Trunk.prototype.hit = function (damage) {
   this.health -= damage;
   if (this.health <= 0) {
     if (this.board.remove(this)) {

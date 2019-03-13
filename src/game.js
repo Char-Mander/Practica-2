@@ -11,31 +11,23 @@ var playGame = function() {
 
   var board = new GameBoard();
   Game.setBoard(0,new Background()); //Pantalla de juego
-  board.add(new Player()); //Pantalla de juego
   board.add(new Car(cars.cgreen));
   board.add(new Car(cars.cyellow));
   board.add(new Car(cars.cblue));
-  board.add(new Car(cars.swood));
-  board.add(new Car(cars.mwood));
-  board.add(new Car(cars.lwood));
-  board.add(new Car(cars.swood, {y: 250}));
-  board.add(new Car(cars.mwood, {y: 200}));
   board.add(new Car(cars.vwhite));
   board.add(new Car(cars.vbrown));
+  board.add(new Trunk(trunks.swood));
+  board.add(new Trunk(trunks.mwood));
+  board.add(new Trunk(trunks.lwood));
+  board.add(new Trunk(trunks.turtle1));
+  board.add(new Trunk(trunks.turtle2));
 
 
+    board.add(new Player()); //Pantalla de juego
 
-/*
-//Pruebas
-  board.add(new Car(cars.floor, {x:150})); //Cuidado con la config de x,y aqui, hay conflicto con lo ya definido
-  board.add(new Car(cars.mosca, {x:250}));
-  board.add(new Car(cars.turtle_, {x:350}));
-*/
-
-
+ 
   Game.setBoard(1,board);
   //Game.setBoard(2,new Level(level1,winGame)); //Crea el nivel con los enemigos  
-
 }
 
 var winGame = function() {
