@@ -81,7 +81,10 @@ Background.prototype.step = function () { };
 // PLAYER
 
 var Player = function () {
-  this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 150 });
+  var dx, dy, moving;
+  var time;
+ 
+  this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 200});
 
   this.x = Game.width / 2 - this.w / 2;
   this.y = Game.height + this.h / 2;
@@ -89,102 +92,73 @@ var Player = function () {
   this.subFrame = 0;
 
   //Metodo que mantiene a la rana encima del tronco
-  this.onTrunk = function(vt){
-  	this.x += vt;
+  this.onTrunk = function (vt) {
+    this.x += vt;
   }
 
   this.step = function (dt) {
-   /*  //MOVIMIENTO RANA CASILLA A CASILLA
-  var temp;
-  if (Game.keys['left']) {
-    temp = setInterval(() => {
-      () => {
-        this.frame = Math.floor(this.subFrame++ / 3);
-        if (this.subFrame >= 21) {
-          this.subFrame = 0;
-          clearInterval(temp);
-        }
-      }
-    }, 500);
-    this.vx = -this.maxVel;
-    this.x -= 40;
-  } else if (Game.keys['right']) {
-    temp = setInterval(() => {
-      () => {
-        this.frame = Math.floor(this.subFrame++ / 3);
-        if (this.subFrame >= 21) {
-          this.subFrame = 0;
-          clearInterval(temp);
-        }
-      }
-    }, 16);
-    this.vx = this.maxVel;
-    this.x += 40;
-  } else if (Game.keys['up']) {
-    temp = setInterval(() => {
-      () => {
-        this.frame = Math.floor(this.subFrame++ / 3);
-        if (this.subFrame >= 21) {
-          this.subFrame = 0;
-          clearInterval(temp);
-        }
-      }
-    }, 16);
-    this.vy = -this.maxVel;
-    this.y += 40;
-  } else if (Game.keys['down']) {
-    temp = setInterval(() => {
-      () => {
-        this.frame = Math.floor(this.subFrame++ / 3);
-        if (this.subFrame >= 21) {
-          this.subFrame = 0;
-          clearInterval(temp);
-        }
-      }
-    }, 16);
-    this.vy = this.maxVel;
-    this.y -= 40;
-  } else {
-    this.vx = 0;
-    this.vy = 0;
-  }*/
     if (Game.keys['left']) {
-      this.vx = -this.maxVel;
-      this.frame = Math.floor(this.subFrame++ / 3);
-      this.x += this.vx * dt;
-      if (this.subFrame >= 21) {
-        this.subFrame = 0;
+      if (moving !== true) {
+        moving = true;
+        dx = this.x - 40;
+        dy = this.y;
+        this.vx = -this.maxVel;
+        this.frame = Math.floor(this.subFrame++ / 3);
+        this.x -= this.vx*dt;
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+        }
       }
     }
     else if (Game.keys['right']) {
-      this.vx = this.maxVel;
-      this.frame = Math.floor(this.subFrame++ / 3);
-      this.x += this.vx * dt;
-      if (this.subFrame >= 21) {
-        this.subFrame = 0;
+      if (moving !== true) {
+        moving = true;
+        dx = this.x + 40;
+        dy = this.y;
+        this.vx = this.maxVel;
+        this.frame = Math.floor(this.subFrame++ / 3);
+        this.x += this.vx*dt;
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+        }
       }
     }
     else if (Game.keys['down']) {
-      this.vy = -this.maxVel;
-      this.frame = Math.floor(this.subFrame++ / 3);
-      this.y += this.vy * dt;
-      if (this.subFrame >= 21) {
-        this.subFrame = 0;
+      if (moving !== true) {
+        moving = true;
+        dx = this.x;
+        dy = this.y - 40;
+        this.vy = -this.maxVel;
+        this.frame = Math.floor(this.subFrame++ / 3);
+        this.y -= this.vy*dt;
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+        }
       }
     }
     else if (Game.keys['up']) {
-      this.vy = this.maxVel;
-      this.frame = Math.floor(this.subFrame++ / 3);
-      this.y += this.vy * dt;
-      if (this.subFrame >= 21) {
-        this.subFrame = 0;
+      if (moving !== true) {
+        moving = true;
+        dx = this.x;
+        dy = this.y + 40;
+        this.vy = this.maxVel;
+        this.frame = Math.floor(this.subFrame++ / 3);
+        this.y += this.vy*dt;
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+        }
       }
     }
     else {
+      //moving = false;
       this.vx = 0;
       this.vy = 0;
       this.x += this.vx * dt;
       this.y += this.vy * dt;
+    }
+
+    if(this.x === dx && this.y === dy){
+      moving = false;
     }
 
 
@@ -207,7 +181,14 @@ var Player = function () {
     }
 
     this.reload -= dt;
+    console.log("Se está moviendo: " + moving);
+    console.log("Coordenadas destino: (" + dx + ", " + dy + ")");
+    console.log("Velocidad: (" + this.vx + ", " + this.vy + ")");
   }
+
+
+
+  
 
 }
 
@@ -232,19 +213,19 @@ var Dead = function (centerX, centerY) {
 Dead.prototype = new Sprite();
 
 Dead.prototype.step = function (dt) {
-    this.board.remove(this);
+  this.board.remove(this);
 };
 
 
 /// CARs
-    //E: movimiento vertical.
-    //A: movimiento horizontal
+//E: movimiento vertical.
+//A: movimiento horizontal
 var cars = {
-  cblue:     { x: -50,   y: 435, sprite: 'blue_car', health: 10, A: 60 },
-  cgreen:    { x: -50,   y: 385, sprite: 'green_car', health: 10, A: 50 },
-  cyellow:   { x: -50,   y: 335, sprite: 'yellow_car', health: 10, A: 70},
-  vwhite: { x: -50,   y: 480, sprite: 'white_van', health: 10, A: 50 },              
-  vbrown: { x: 550,   y: 525, sprite: 'brown_van', health: 10, A: -50}
+  cblue: { x: -50, y: 435, sprite: 'blue_car', health: 10, A: 60 },
+  cgreen: { x: -50, y: 385, sprite: 'green_car', health: 10, A: 50 },
+  cyellow: { x: -50, y: 335, sprite: 'yellow_car', health: 10, A: 70 },
+  vwhite: { x: -50, y: 480, sprite: 'white_van', health: 10, A: 50 },
+  vbrown: { x: 550, y: 525, sprite: 'brown_van', health: 10, A: -50 }
 };
 
 
@@ -294,13 +275,13 @@ Car.prototype.hit = function (damage) {
 }
 
 /// TRUNK (TRONCOS)
-    //A: movimiento horizontal
+//A: movimiento horizontal
 var trunks = {
-  swood:  { x: 0, y: 250, sprite: 'small_wood', health: 20, A: 70},
-  mwood:  { x: 550,   y: 50, sprite: 'medium_wood', health: 10, A:-50},
-  lwood:  { x: 0,   y: 150, sprite: 'large_wood', health: 10, A:60},
-  turtle1: { x: 0,   y: 200, sprite: 'turtle', health: 10, A:40},
-  turtle2: { x: 0,   y: 100, sprite: 'turtle', health: 10, A:60}
+  swood: { x: 0, y: 250, sprite: 'small_wood', health: 20, A: 70 },
+  mwood: { x: 550, y: 50, sprite: 'medium_wood', health: 10, A: -50 },
+  lwood: { x: 0, y: 150, sprite: 'large_wood', health: 10, A: 60 },
+  turtle1: { x: 0, y: 200, sprite: 'turtle', health: 10, A: 40 },
+  turtle2: { x: 0, y: 100, sprite: 'turtle', health: 10, A: 60 }
 
 };
 
@@ -335,8 +316,8 @@ Trunk.prototype.step = function (dt) {
 
   var collision = this.board.collide(this, OBJECT_PLAYER);
   if (collision) {
-  	 var player = new Player();
-  	 player.onTrunk(dt); //No se actualiza
+    var player = new Player();
+    player.onTrunk(dt); //No se actualiza
   }
 
 }
