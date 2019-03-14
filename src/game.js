@@ -7,6 +7,8 @@ var startGame = function() {
 }
 */
 
+var frog;
+
 var playGame = function() {
 
   var board = new GameBoard();
@@ -22,13 +24,16 @@ var playGame = function() {
   board.add(new Trunk(trunks.turtle1));
   board.add(new Trunk(trunks.turtle2));
 
-
-    board.add(new Player()); //Pantalla de juego
+  createPlayer();
+  board.add(frog);
 
  
   Game.setBoard(1,board);
   //Game.setBoard(2,new Level(level1,winGame)); //Crea el nivel con los enemigos  
 }
+
+function createPlayer(){ frog = new Player();}
+
 
 var winGame = function() {
   Game.setBoard(3,new TitleScreen("You win!", 
