@@ -11,9 +11,9 @@ var sprites = {
   grey_skull: { sx: 307, sy: 128, w: 46, h: 35, frames: 1 },
   green_skull: { sx: 355, sy: 128, w: 46, h: 35, frames: 1 },
 
-  medium_wood: { sx: 9, sy: 122, w: 191, h: 41, frames: 1 },
-  large_wood: { sx: 9, sy: 171, w: 248, h: 41, frames: 1 },
-  small_wood: { sx: 270, sy: 171, w: 131, h: 41, frames: 1 },
+  medium_wood: { sx: 9, sy: 122, w: 191, h: 39, frames: 1 },
+  large_wood: { sx: 9, sy: 171, w: 248, h: 39, frames: 1 },
+  small_wood: { sx: 270, sy: 171, w: 131, h: 39, frames: 1 },
 
   leaf: { sx: 4, sy: 234, w: 44, h: 40, frames: 1 },
   fly: { sx: 58, sy: 239, w: 31, h: 34, frames: 1 },
@@ -39,6 +39,8 @@ var OBJECT_PLAYER = 1,
   OBJECT_POWERUP = 16,
   OBJECT_BACKGROUND = 32,
   OBJECT_TRUNK = 64;
+
+
 
 
 /// CLASE PADRE SPRITE
@@ -81,6 +83,11 @@ Background.prototype.step = function () { };
 // PLAYER
 
 var Player = function () {
+
+	//Declararlo fuera, lo pongo a false en trunk
+	var enTronco =false; //Para saber si esta en el tronco
+
+
   this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 150 });
 
   this.x = Game.width / 2 - this.w / 2;
@@ -90,64 +97,14 @@ var Player = function () {
 
   //Metodo que mantiene a la rana encima del tronco
   this.onTrunk = function(vt){
-  	this.x += vt;
+  	this.enTronco = true;
+  	this.vx = vt;
   }
 
+
+
   this.step = function (dt) {
-   /*  //MOVIMIENTO RANA CASILLA A CASILLA
-  var temp;
-  if (Game.keys['left']) {
-    temp = setInterval(() => {
-      () => {
-        this.frame = Math.floor(this.subFrame++ / 3);
-        if (this.subFrame >= 21) {
-          this.subFrame = 0;
-          clearInterval(temp);
-        }
-      }
-    }, 500);
-    this.vx = -this.maxVel;
-    this.x -= 40;
-  } else if (Game.keys['right']) {
-    temp = setInterval(() => {
-      () => {
-        this.frame = Math.floor(this.subFrame++ / 3);
-        if (this.subFrame >= 21) {
-          this.subFrame = 0;
-          clearInterval(temp);
-        }
-      }
-    }, 16);
-    this.vx = this.maxVel;
-    this.x += 40;
-  } else if (Game.keys['up']) {
-    temp = setInterval(() => {
-      () => {
-        this.frame = Math.floor(this.subFrame++ / 3);
-        if (this.subFrame >= 21) {
-          this.subFrame = 0;
-          clearInterval(temp);
-        }
-      }
-    }, 16);
-    this.vy = -this.maxVel;
-    this.y += 40;
-  } else if (Game.keys['down']) {
-    temp = setInterval(() => {
-      () => {
-        this.frame = Math.floor(this.subFrame++ / 3);
-        if (this.subFrame >= 21) {
-          this.subFrame = 0;
-          clearInterval(temp);
-        }
-      }
-    }, 16);
-    this.vy = this.maxVel;
-    this.y -= 40;
-  } else {
-    this.vx = 0;
-    this.vy = 0;
-  }*/
+
     if (Game.keys['left']) {
       this.vx = -this.maxVel;
       this.frame = Math.floor(this.subFrame++ / 3);
@@ -181,10 +138,14 @@ var Player = function () {
       }
     }
     else {
-      this.vx = 0;
-      this.vy = 0;
-      this.x += this.vx * dt;
-      this.y += this.vy * dt;
+    	//Booleano que si no esta en el tronco, la x sea la que pulsemos
+    	if(!this.enTronco)
+    		this.vx = 0;
+
+		this.vy = 0;
+		this.x += this.vx * dt;
+		this.y += this.vy * dt;
+    	
     }
 
 
@@ -207,6 +168,10 @@ var Player = function () {
     }
 
     this.reload -= dt;
+
+    if(!this.enTronco)
+    	this.vx = 0;
+
   }
 
 }
@@ -220,26 +185,6 @@ Player.prototype.hit = function (damage) {
   }
 }
 
-/*
-
-///// EXPLOSION
-
-var Explosion = function (centerX, centerY) {
-  this.setup('explosion', { frame: 0 });
-  this.x = centerX - this.w / 2;
-  this.y = centerY - this.h / 2;
-  this.subFrame = 0;
-};
-
-Explosion.prototype = new Sprite();
-
-Explosion.prototype.step = function (dt) {
-  this.frame = Math.floor(this.subFrame++ / 3);
-  if (this.subFrame >= 36) {
-    this.board.remove(this);
-  }
-};
-*/
 
 ///// DEAD
 
@@ -254,35 +199,6 @@ Dead.prototype = new Sprite();
 
 Dead.prototype.step = function (dt) {
     //this.board.remove(this);
-};
-
-
-/// Player Missile
-
-
-var PlayerMissile = function (x, y) {
-  this.setup('missile', { vy: -700, damage: 10 });
-  this.x = x - this.w / 2;
-  this.y = y - this.h;
-};
-
-PlayerMissile.prototype = new Sprite();
-PlayerMissile.prototype.type = OBJECT_PLAYER_PROJECTILE;
-
-
-PlayerMissile.prototype.step = function (dt) {
-  this.y += this.vy * dt;
-  if (this.y < -this.h) { this.board.remove(this); }
-
-  var collision = this.board.collide(this, OBJECT_CAR);
-  if (collision) {
-    collision.hit(this.damage);
-    this.board.remove(this);
-  } else if (this.y < -this.h) {
-    this.board.remove(this);
-  }
-
-
 };
 
 
@@ -329,7 +245,7 @@ Car.prototype.step = function (dt) {
   var collision = this.board.collide(this, OBJECT_PLAYER);
   if (collision) {
     collision.hit(this.damage);
-    this.board.remove(this);
+    //this.board.remove(this);
   }
 
 }
@@ -347,11 +263,11 @@ Car.prototype.hit = function (damage) {
 /// TRUNK (TRONCOS)
     //A: movimiento horizontal
 var trunks = {
-  swood:  { x: 0, y: 250, sprite: 'small_wood', health: 20, A: 70},
-  mwood:  { x: 550,   y: 50, sprite: 'medium_wood', health: 10, A:-50},
-  lwood:  { x: 0,   y: 150, sprite: 'large_wood', health: 10, A:60},
-  turtle1: { x: 0,   y: 200, sprite: 'turtle', health: 10, A:40},
-  turtle2: { x: 0,   y: 100, sprite: 'turtle', health: 10, A:60}
+  swood:  { x: 0, y: 250, sprite: 'small_wood', health: 20, A: 50},
+  mwood:  { x: 550,   y: 50, sprite: 'medium_wood', health: 10, A:-30},
+  lwood:  { x: 0,   y: 150, sprite: 'large_wood', health: 10, A:40},
+  turtle1: { x: 0,   y: 200, sprite: 'turtle', health: 10, A:20},
+  turtle2: { x: 0,   y: 100, sprite: 'turtle', health: 10, A:40}
 
 };
 
@@ -386,90 +302,9 @@ Trunk.prototype.step = function (dt) {
 
   var collision = this.board.collide(this, OBJECT_PLAYER);
   if (collision) {
-  	 var player = new Player();
-  	 player.onTrunk(dt); //No se actualiza
-  }
-
-}
-
-//Seria move en todo caso, para que se mueva a la vez que el tronco
-Trunk.prototype.hit = function (damage) {
-  this.health -= damage;
-  if (this.health <= 0) {
-    if (this.board.remove(this)) {
-      this.board.add(new Dead(this.x + this.w / 2,
-        this.y + this.h / 2));
-    }
-  }
-
-}
-
-
-
-
-
-/// STAR FIELD
-
-var Starfield = function (speed, opacity, numStars, clear) {
-
-  // Set up the offscreen canvas
-  var stars = document.createElement("canvas");
-  stars.width = Game.width;
-  stars.height = Game.height;
-  var starCtx = stars.getContext("2d");
-
-
-  var offset = 0;
-
-  // If the clear option is set, 
-  // make the background black instead of transparent
-  if (clear) {
-    starCtx.fillStyle = "#000";
-    starCtx.fillRect(0, 0, stars.width, stars.height);
-  }
-
-  // Now draw a bunch of random 2 pixel
-  // rectangles onto the offscreen canvas
-  starCtx.fillStyle = "#FFF";
-  starCtx.globalAlpha = opacity;
-  for (var i = 0; i < numStars; i++) {
-    starCtx.fillRect(Math.floor(Math.random() * stars.width),
-      Math.floor(Math.random() * stars.height),
-      2,
-      2);
-  }
-
-  // This method is called every frame
-  // to draw the starfield onto the canvas
-  this.draw = function (ctx) {
-    var intOffset = Math.floor(offset);
-    var remaining = stars.height - intOffset;
-
-    // Draw the top half of the starfield
-    if (intOffset > 0) {
-      ctx.drawImage(stars,
-        0, remaining,
-        stars.width, intOffset,
-        0, 0,
-        stars.width, intOffset);
-    }
-
-    // Draw the bottom half of the starfield
-    if (remaining > 0) {
-      ctx.drawImage(stars,
-        0, 0,
-        stars.width, remaining,
-        0, intOffset,
-        stars.width, remaining);
-    }
-  }
-
-  // This method is called to update
-  // the starfield
-  this.step = function (dt) {
-    offset += dt * speed;
-    offset = offset % Player.height;
-  }
+  	 Game.frogP.onTrunk(this.vx); 
+  }else
+  		this.enTronco = false;
 
 }
 

@@ -1,5 +1,7 @@
 var Game = new function() {
 
+	var frogP; //Variable que guarda el objeto del jugador
+
   // Inicialización del juego
   // se obtiene el canvas, se cargan los recursos y se llama a callback
   this.initialize = function(canvasElementId, sprite_data, callback) {
@@ -7,6 +9,7 @@ var Game = new function() {
     this.canvas = document.getElementById(canvasElementId)
     this.width = this.canvas.width;
     this.height= this.canvas.height;
+
 
     this.ctx = this.canvas.getContext && this.canvas.getContext('2d');
     if(!this.ctx) { 
