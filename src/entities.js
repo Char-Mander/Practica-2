@@ -220,27 +220,6 @@ Player.prototype.hit = function (damage) {
   }
 }
 
-/*
-
-///// EXPLOSION
-
-var Explosion = function (centerX, centerY) {
-  this.setup('explosion', { frame: 0 });
-  this.x = centerX - this.w / 2;
-  this.y = centerY - this.h / 2;
-  this.subFrame = 0;
-};
-
-Explosion.prototype = new Sprite();
-
-Explosion.prototype.step = function (dt) {
-  this.frame = Math.floor(this.subFrame++ / 3);
-  if (this.subFrame >= 36) {
-    this.board.remove(this);
-  }
-};
-*/
-
 ///// DEAD
 
 var Dead = function (centerX, centerY) {
@@ -253,36 +232,7 @@ var Dead = function (centerX, centerY) {
 Dead.prototype = new Sprite();
 
 Dead.prototype.step = function (dt) {
-    //this.board.remove(this);
-};
-
-
-/// Player Missile
-
-
-var PlayerMissile = function (x, y) {
-  this.setup('missile', { vy: -700, damage: 10 });
-  this.x = x - this.w / 2;
-  this.y = y - this.h;
-};
-
-PlayerMissile.prototype = new Sprite();
-PlayerMissile.prototype.type = OBJECT_PLAYER_PROJECTILE;
-
-
-PlayerMissile.prototype.step = function (dt) {
-  this.y += this.vy * dt;
-  if (this.y < -this.h) { this.board.remove(this); }
-
-  var collision = this.board.collide(this, OBJECT_CAR);
-  if (collision) {
-    collision.hit(this.damage);
     this.board.remove(this);
-  } else if (this.y < -this.h) {
-    this.board.remove(this);
-  }
-
-
 };
 
 
@@ -329,7 +279,6 @@ Car.prototype.step = function (dt) {
   var collision = this.board.collide(this, OBJECT_PLAYER);
   if (collision) {
     collision.hit(this.damage);
-    this.board.remove(this);
   }
 
 }
@@ -403,73 +352,3 @@ Trunk.prototype.hit = function (damage) {
   }
 
 }
-
-
-
-
-
-/// STAR FIELD
-
-var Starfield = function (speed, opacity, numStars, clear) {
-
-  // Set up the offscreen canvas
-  var stars = document.createElement("canvas");
-  stars.width = Game.width;
-  stars.height = Game.height;
-  var starCtx = stars.getContext("2d");
-
-
-  var offset = 0;
-
-  // If the clear option is set, 
-  // make the background black instead of transparent
-  if (clear) {
-    starCtx.fillStyle = "#000";
-    starCtx.fillRect(0, 0, stars.width, stars.height);
-  }
-
-  // Now draw a bunch of random 2 pixel
-  // rectangles onto the offscreen canvas
-  starCtx.fillStyle = "#FFF";
-  starCtx.globalAlpha = opacity;
-  for (var i = 0; i < numStars; i++) {
-    starCtx.fillRect(Math.floor(Math.random() * stars.width),
-      Math.floor(Math.random() * stars.height),
-      2,
-      2);
-  }
-
-  // This method is called every frame
-  // to draw the starfield onto the canvas
-  this.draw = function (ctx) {
-    var intOffset = Math.floor(offset);
-    var remaining = stars.height - intOffset;
-
-    // Draw the top half of the starfield
-    if (intOffset > 0) {
-      ctx.drawImage(stars,
-        0, remaining,
-        stars.width, intOffset,
-        0, 0,
-        stars.width, intOffset);
-    }
-
-    // Draw the bottom half of the starfield
-    if (remaining > 0) {
-      ctx.drawImage(stars,
-        0, 0,
-        stars.width, remaining,
-        0, intOffset,
-        stars.width, remaining);
-    }
-  }
-
-  // This method is called to update
-  // the starfield
-  this.step = function (dt) {
-    offset += dt * speed;
-    offset = offset % Player.height;
-  }
-
-}
-
