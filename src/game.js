@@ -24,15 +24,15 @@ var playGame = function() {
   board.add(new Trunk(trunks.turtle1));
   board.add(new Trunk(trunks.turtle2));
 
-  createPlayer();
-  board.add(frog);
+  Game.frogP = new Player();
+  board.add(Game.frogP);
 
  
   Game.setBoard(1,board);
   //Game.setBoard(2,new Level(level1,winGame)); //Crea el nivel con los enemigos  
 }
 
-function createPlayer(){ frog = new Player();}
+//var createPlayer = function(){ Game.frogP = new Player();};
 
 
 var winGame = function() {
