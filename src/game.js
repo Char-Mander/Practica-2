@@ -11,11 +11,12 @@ var playGame = function() {
 
   var board = new GameBoard();
   Game.setBoard(0,new Background()); //Pantalla de juego
-  board.add(new Car(cars.cgreen));
+ /* board.add(new Car(cars.cgreen));
   board.add(new Car(cars.cyellow));
   board.add(new Car(cars.cblue));
   board.add(new Car(cars.vwhite));
-  board.add(new Car(cars.vbrown));
+  board.add(new Car(cars.vbrown));*/
+  board.add(new Water());
   board.add(new Trunk(trunks.swood));
   board.add(new Trunk(trunks.mwood));
   board.add(new Trunk(trunks.lwood));
@@ -29,8 +30,6 @@ var playGame = function() {
   Game.setBoard(1,board);
   //Game.setBoard(2,new Level(level1,winGame)); //Crea el nivel con los enemigos  
 }
-
-//var createPlayer = function(){ Game.frogP = new Player();};
 
 
 var winGame = function() {
