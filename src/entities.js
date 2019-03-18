@@ -82,9 +82,9 @@ Background.prototype.step = function () { };
 
 // PLAYER
 
-var Player = function () {
-  var dx, dy, moving;
 
+var Player = function () {
+  var moving, dx, dy, timer;
 	//Declararlo fuera, lo pongo a false en trunk
 	var enTronco = false; //Para saber si esta en el tronco
   this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 150 });
@@ -105,69 +105,89 @@ var Player = function () {
   this.step = function (dt) {
     
     if (Game.keys['left']) {
-      if (this.moving !== true || this.moving === undefined) {
-        this.moving = true;
-        this.dx = this.x - 40;
-        this.dy = this.y;
+      if (moving !== true || moving === undefined) {
+        moving = true;
+        dx = this.x - 40;
+       // dy = this.y;
         this.vx = -this.maxVel;
+        
+       // while(this.x != dx){
+        if(this.x !== thix.vx){
+
+        }
+        else{
+          moving = false
+        }
+        
+        //}
+        /*
         this.frame = Math.floor(this.subFrame++ / 3);
-        this.x -= this.vx*dt;
         if (this.subFrame >= 21) {
           this.subFrame = 0;
-        }
+        }*/
       }
     }
     else if (Game.keys['right']) {
-      if (this.moving !== true || this.moving === undefined) {
-        this.moving = true;
-        this.dx = this.x + 40;
-        this.dy = this.y;
+      if (moving !== true || moving === undefined) {
+        moving = true;
+        dx = this.x + 40;
+        //dy = this.y;
         this.vx = this.maxVel;
+        while(this.x !== dx){
+          this.x += this.vx*dt;
+        }
+        /*
         this.frame = Math.floor(this.subFrame++ / 3);
-        this.x += this.vx*dt;
         if (this.subFrame >= 21) {
           this.subFrame = 0;
-        }
+        }*/
       }
     }
     else if (Game.keys['down']) {
-      if (this.moving !== true || this.moving === undefined) {
-        this.moving = true;
-        this.dx = this.x;
-        this.dy = this.y - 40;
-        this.vy = -this.maxVel;
+      if (moving !== true || moving === undefined) {
+        moving = true;
+        //dx = this.x;
+        dy = this.y - 40;
+        this.vy = this.maxVel;
+        while(this.y !== this.vy){
+        this.y += this.vy*dt;
+        }
+        /*
         this.frame = Math.floor(this.subFrame++ / 3);
-        this.y -= this.vy*dt;
         if (this.subFrame >= 21) {
           this.subFrame = 0;
-        }
+        }*/
       }
     }
     else if (Game.keys['up']) {
-      if (this.moving !== true || this.moving === undefined) {
-        this.moving = true;
-        this.dx = this.x;
-        this.dy = this.y + 40;
-        this.vy = this.maxVel;
-        this.frame = Math.floor(this.subFrame++ / 3);
+      if (moving !== true || moving === undefined) {
+        moving = true;
+        //dx = this.x;
+        dy = this.y + 40;
+        this.vy = -this.maxVel;
+        while(this.y !== this.vy){
         this.y += this.vy*dt;
+        }
+       /*
+        this.frame = Math.floor(this.subFrame++ / 3);
         if (this.subFrame >= 21) {
           this.subFrame = 0;
-        }
+        }*/
       }
     }
     else {
     	//Booleano que si no esta en el tronco, la x sea la que pulsemos
     	if(!this.enTronco)
-    		this.vx = 0;
-
-		this.vy = 0;
+        this.vx = 0;
+        
+		/*this.vy = 0;
 		this.x += this.vx * dt;
-		this.y += this.vy * dt;
+		this.y += this.vy * dt;*/
     }
 
     if(this.x === dx && this.y === dy){
-      this.moving = false;
+      clearInterval(timer);
+      moving = false;
     }
 
 
@@ -195,8 +215,8 @@ var Player = function () {
     console.log("Velocidad: (" + this.vx + ", " + this.vy + ")");
 
     if(!this.enTronco)
-    	this.vx = 0;
-
+      this.vx = 0;
+      
   }
 
 
@@ -210,6 +230,7 @@ Player.prototype.type = OBJECT_PLAYER;
 
 Player.prototype.hit = function (damage) {
   if (this.board.remove(this)) {
+    new Dead();
     loseGame();
   }
 }
