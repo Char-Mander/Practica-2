@@ -107,9 +107,10 @@ var Player = function () {
     if (Game.keys['left']) {
       if (moving !== true || moving === undefined) {
         moving = true;
-        dx = this.x - 40;
+        dx = this.x - 42;
         dy = this.y;
-        if(dx<0){
+
+        if(dx < 0){
           dx = 0;
         }
 
@@ -122,11 +123,13 @@ var Player = function () {
     else if (Game.keys['right']) {
       if (moving !== true || moving === undefined) {
         moving = true;
-        dx = this.x + 40;
+        dx = this.x + 42;
         dy = this.y;
+
         if(dx > 510){
           dx = 510;
         }
+
         this.vx = this.maxVel;
         this.vy = 0;
         this.x += parseInt(this.vx * dt);
@@ -136,9 +139,14 @@ var Player = function () {
       if (moving !== true || moving === undefined) {
         moving = true;
         dx = this.x;
-        dy = this.y - 40;
+        dy = this.y - 42;
+        
+        if(dy < 0){
+          dy = 0;
+        }
+
         this.vx = 0;
-        this.vy = this.maxVel;
+        this.vy = -this.maxVel;
         this.y += parseInt(this.vy * dt);
       }
     }
@@ -146,9 +154,14 @@ var Player = function () {
       if (moving !== true || moving === undefined) {
         moving = true;
         dx = this.x;
-        dy = this.y; + 40;
+        dy = this.y + 42;
+
+        if(dy > 585){
+          dy = 585;
+        }
+
         this.vx = 0;
-        this.vy = -this.maxVel;
+        this.vy = this.maxVel;
         this.y += parseInt(this.vy * dt);
         
       }
@@ -158,13 +171,14 @@ var Player = function () {
       if (!this.enTronco && !moving)
         this.vx = 0;
       
-      /*this.vy = 0;*/
+        
       if ((this.x === dx && this.y === dy) || (this.x + 1 == dx && this.y === dy ) 
       || (this.x - 1 == dx && this.y === dy ) || (this.x === dx && this.y + 1 === dy) 
       || (this.x === dx && this.y - 1 === dy)) {
          moving = false;
          this.vx = 0;
          this.vy = 0;
+         this.frame = 0;
          this.subFrame = 0;
        }
 
@@ -176,7 +190,7 @@ var Player = function () {
         this.x += parseInt(this.vx * dt);
         this.y += parseInt(this.vy * dt);
       }
-      
+
     }
 
     if (this.x < 0) {
@@ -202,6 +216,8 @@ var Player = function () {
     console.log("Coordenadas destino: (" + dx + ", " + dy + ")");
     console.log("Coordenadas actuales: (" + this.x + ", " + this.y + ")");
     console.log("Velocidad: (" + this.vx + ", " + this.vy + ")");
+    if (!this.enTronco && !moving)
+        this.vx = 0;
   }
 
 
@@ -233,7 +249,7 @@ var Dead = function (centerX, centerY) {
 Dead.prototype = new Sprite();
 
 Dead.prototype.step = function (dt) {
-  this.board.remove(this);
+  //this.board.remove(this);
 
 };
 

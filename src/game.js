@@ -12,6 +12,7 @@ var frog;
 var playGame = function() {
 
   var board = new GameBoard();
+  
   Game.setBoard(0,new Background()); //Pantalla de juego
   board.add(new Car(cars.cgreen));
   board.add(new Car(cars.cyellow));
