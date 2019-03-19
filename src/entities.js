@@ -117,7 +117,7 @@ var Player = function () {
         this.vx = -this.maxVel;
         this.vy = 0;
         
-        this.x += parseInt(this.vx * dt);
+       // this.x += parseInt(this.vx * dt);
       }
     }
     else if (Game.keys['right']) {
@@ -132,7 +132,7 @@ var Player = function () {
 
         this.vx = this.maxVel;
         this.vy = 0;
-        this.x += parseInt(this.vx * dt);
+      //  this.x += parseInt(this.vx * dt);
       }
     }
     else if (Game.keys['down']) {
@@ -147,7 +147,7 @@ var Player = function () {
 
         this.vx = 0;
         this.vy = -this.maxVel;
-        this.y += parseInt(this.vy * dt);
+       // this.y += parseInt(this.vy * dt);
       }
     }
     else if (Game.keys['up']) {
@@ -162,7 +162,7 @@ var Player = function () {
 
         this.vx = 0;
         this.vy = this.maxVel;
-        this.y += parseInt(this.vy * dt);
+      //  this.y += parseInt(this.vy * dt);
         
       }
     }
