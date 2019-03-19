@@ -83,8 +83,14 @@ Background.prototype.step = function () { };
 
 
 // PLAYER
+  var enTronco = false; //Para saber si esta en el tronco
+
 
 var Player = function () {
+  var dx, dy, moving;
+
+
+	//Declararlo fuera, lo pongo a false en trunk
 
   this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 150 });
 
@@ -102,37 +108,57 @@ var Player = function () {
 
 
   this.step = function (dt) {
-
+    
     if (Game.keys['left']) {
-      this.vx = -this.maxVel;
-      this.frame = Math.floor(this.subFrame++ / 3);
-      this.x += this.vx * dt;
-      if (this.subFrame >= 21) {
-        this.subFrame = 0;
+      if (this.moving !== true || this.moving === undefined) {
+        this.moving = true;
+        this.dx = this.x - 40;
+        this.dy = this.y;
+        this.vx = -this.maxVel;
+        this.frame = Math.floor(this.subFrame++ / 3);
+        this.x -= this.vx*dt;
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+        }
       }
     }
     else if (Game.keys['right']) {
-      this.vx = this.maxVel;
-      this.frame = Math.floor(this.subFrame++ / 3);
-      this.x += this.vx * dt;
-      if (this.subFrame >= 21) {
-        this.subFrame = 0;
+      if (this.moving !== true || this.moving === undefined) {
+        this.moving = true;
+        this.dx = this.x + 40;
+        this.dy = this.y;
+        this.vx = this.maxVel;
+        this.frame = Math.floor(this.subFrame++ / 3);
+        this.x += this.vx*dt;
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+        }
       }
     }
     else if (Game.keys['down']) {
-      this.vy = -this.maxVel;
-      this.frame = Math.floor(this.subFrame++ / 3);
-      this.y += this.vy * dt;
-      if (this.subFrame >= 21) {
-        this.subFrame = 0;
+      if (this.moving !== true || this.moving === undefined) {
+        this.moving = true;
+        this.dx = this.x;
+        this.dy = this.y - 40;
+        this.vy = -this.maxVel;
+        this.frame = Math.floor(this.subFrame++ / 3);
+        this.y -= this.vy*dt;
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+        }
       }
     }
     else if (Game.keys['up']) {
-      this.vy = this.maxVel;
-      this.frame = Math.floor(this.subFrame++ / 3);
-      this.y += this.vy * dt;
-      if (this.subFrame >= 21) {
-        this.subFrame = 0;
+      if (this.moving !== true || this.moving === undefined) {
+        this.moving = true;
+        this.dx = this.x;
+        this.dy = this.y + 40;
+        this.vy = this.maxVel;
+        this.frame = Math.floor(this.subFrame++ / 3);
+        this.y += this.vy*dt;
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+        }
       }
     }
     else {
@@ -143,7 +169,11 @@ var Player = function () {
 
 		this.vy = 0;
 		this.x += this.vx * dt;
-		this.y += this.vy * dt;    	
+		this.y += this.vy * dt;
+    }
+
+    if(this.x === dx && this.y === dy){
+      this.moving = false;
     }
 
 
@@ -166,9 +196,18 @@ var Player = function () {
     }
 
     this.reload -= dt;
+
     //Cada vez que hay un step, se resetea el estatus en el tronco
     this.enTronco = false;
+
+    console.log("Se está moviendo: " + moving);
+    console.log("Coordenadas destino: (" + dx + ", " + dy + ")");
+    console.log("Velocidad: (" + this.vx + ", " + this.vy + ")");
   }
+
+
+
+  
 
 }
 
@@ -199,13 +238,15 @@ Death.prototype.step = function (dt) {
 };
 
 
-/// CARS
+/// CARs
+//E: movimiento vertical.
+//A: movimiento horizontal
 var cars = {
-  cblue:     { x: -50,   y: 435, sprite: 'blue_car', health: 10, A: 60 },
-  cgreen:    { x: -50,   y: 385, sprite: 'green_car', health: 10, A: 50 },
-  cyellow:   { x: -50,   y: 335, sprite: 'yellow_car', health: 10, A: 70},
-  vwhite: { x: -50,   y: 480, sprite: 'white_van', health: 10, A: 50 },              
-  vbrown: { x: 550,   y: 525, sprite: 'brown_van', health: 10, A: -50}
+  cblue: { x: -50, y: 435, sprite: 'blue_car', health: 10, A: 60 },
+  cgreen: { x: -50, y: 385, sprite: 'green_car', health: 10, A: 50 },
+  cyellow: { x: -50, y: 335, sprite: 'yellow_car', health: 10, A: 70 },
+  vwhite: { x: -50, y: 480, sprite: 'white_van', health: 10, A: 50 },
+  vbrown: { x: 550, y: 525, sprite: 'brown_van', health: 10, A: -50 }
 };
 
 
@@ -240,7 +281,6 @@ Car.prototype.step = function (dt) {
   var collision = this.board.collide(this, OBJECT_PLAYER);
   if (collision) {
     collision.hit(this.damage);
-    //this.board.remove(this);
   }
 
 }
@@ -266,6 +306,7 @@ var trunks = {    //A: movimiento horizontal
   lwood:  { x: 0,   y: 150, sprite: 'large_wood', health: 10, A:15},//40
   turtle1: { x: 0,   y: 200, sprite: 'turtle', health: 10, A:15},//20
   turtle2: { x: 0,   y: 100, sprite: 'turtle', health: 10, A:10}//40
+
 
 };
 

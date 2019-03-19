@@ -7,6 +7,8 @@ var startGame = function() {
 }
 */
 
+var frog;
+
 var playGame = function() {
 
   var board = new GameBoard();
