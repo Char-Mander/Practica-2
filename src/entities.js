@@ -107,7 +107,7 @@ var Player = function () {
     if (Game.keys['left']) {
       if (moving !== true || moving === undefined) {
         moving = true;
-        dx = this.x - 42;
+        dx = this.x - 40;
         dy = this.y;
 
         if(dx < 0){
@@ -123,7 +123,7 @@ var Player = function () {
     else if (Game.keys['right']) {
       if (moving !== true || moving === undefined) {
         moving = true;
-        dx = this.x + 42;
+        dx = this.x + 40;
         dy = this.y;
 
         if(dx > 510){
@@ -139,7 +139,7 @@ var Player = function () {
       if (moving !== true || moving === undefined) {
         moving = true;
         dx = this.x;
-        dy = this.y - 42;
+        dy = this.y - 40;
         
         if(dy < 0){
           dy = 0;
@@ -154,7 +154,7 @@ var Player = function () {
       if (moving !== true || moving === undefined) {
         moving = true;
         dx = this.x;
-        dy = this.y + 42;
+        dy = this.y + 40;
 
         if(dy > 585){
           dy = 585;
@@ -181,10 +181,15 @@ var Player = function () {
          this.frame = 0;
          this.subFrame = 0;
        }
+       
+       
+       if(this.y === 1){
+         winGame();
+       }
 
       if (moving) {
         this.frame = Math.floor(this.subFrame++ / 3);
-         if (this.subFrame >= 14) {
+         if (this.subFrame >= 21) {
            this.subFrame = 0;
          }
         this.x += parseInt(this.vx * dt);
@@ -231,7 +236,6 @@ Player.prototype.type = OBJECT_PLAYER;
 
 Player.prototype.hit = function (damage) {
   if (this.board.remove(this)) {
-    new Dead();
     loseGame();
   }
 }
