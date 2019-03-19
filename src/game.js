@@ -2,7 +2,7 @@
 // Especifica lo que se debe pintar al cargar el juego
 var startGame = function() {
   Game.setBoard(0,new TitleScreen("Frogger", 
-                                  "Press fire to start playing",
+                                  "Press space to start playing",
                                   playGame));
 }
 */
