@@ -1,24 +1,32 @@
 
+var boardIni; //Board nivel 0
 var board; //Board de fondo nivel 1
 var boardLevel2; //Variable para guardar el objeto del tablero que muestra los titlescreen y la calavera
 
 // Especifica lo que se debe pintar al cargar el juego
-var startGame = function() {  
-  Game.setBoard(0,new TitleScreen("Frogger", 
+var startGame = function() { 
+
+  boardIni = new GameBoard();
+  boardIni.add(new TitleScreen("", 
                                   "Press fire to start playing",
                                   playGame));
+  boardIni.add(new Title()); //Pinta sprite del titulo
+
+  Game.setBoard(0,boardIni);
 }
 
 
 var playGame = function() {
 
+  boardIni = new GameBoard();
+  boardIni.add(new Background());
+  Game.setBoard(0,boardIni); //Pantalla de juego
   board = new GameBoard(); //Fondo para background y coches, tronco, rana...
 
   /*### Crea el fondo (nivel 2) que contendra la calavera si pierde y los mensajes win o lose ###*/
   boardLevel2 = new GameBoard();
   Game.setBoard(2,boardLevel2);//Resetea el fondo 2
 
-  Game.setBoard(0,new Background()); //Pantalla de juego
   /*board.add(new Car(cars.cgreen));
   board.add(new Car(cars.cyellow));
   board.add(new Car(cars.cblue));

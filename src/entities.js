@@ -82,6 +82,19 @@ Background.prototype = new Sprite();
 Background.prototype.type = OBJECT_BACKGROUND;
 Background.prototype.step = function () { };
 
+//TITLE
+
+var Title = function () {
+  this.setup('title', {vx:0, frame: 0, reloadTime: 0, maxVel: 0 });
+};
+
+Title.prototype = new Sprite();
+//Title.prototype.type = OBJECT_DEATH;
+
+Title.prototype.step = function (dt) {
+    //this.board.remove(this);
+};
+
 
 // PLAYER
 var golpe = false; //Booleano que nos dice si ha colisionado la rana con algun objeto
@@ -298,11 +311,11 @@ Game.board.add(new Death(this.x + this.w / 2,
 
 /// TRUNK (TRONCOS)
 var trunks = {    //A: movimiento horizontal
-  swood:  { x: 0, y: 250, sprite: 'small_wood', health: 20, A: 10}, //50
-  mwood:  { x: 550,   y: 50, sprite: 'medium_wood', health: 10, A:-10}, //-30
-  lwood:  { x: 0,   y: 150, sprite: 'large_wood', health: 10, A:15},//40
-  turtle1: { x: 0,   y: 200, sprite: 'turtle', health: 10, A:15},//20
-  turtle2: { x: 0,   y: 100, sprite: 'turtle', health: 10, A:10}//40
+  swood:  { x: 0, y: 250, sprite: 'small_wood', health: 20, A: 40}, //50
+  mwood:  { x: 550,   y: 50, sprite: 'medium_wood', health: 10, A:-30}, //-30
+  lwood:  { x: 0,   y: 150, sprite: 'large_wood', health: 10, A:35},//40
+  turtle1: { x: 0,   y: 200, sprite: 'turtle', health: 10, A:35},//20
+  turtle2: { x: 0,   y: 100, sprite: 'turtle', health: 10, A:40}//40
 
 };
 
@@ -365,19 +378,7 @@ Water.prototype.step = function (dt) {
   }
 
 Water.prototype.hit = function (damage) {
-  /*var b = new GameBoard();
-  b.add(new Death(this.x + this.w / 2,
-        this.y + this.h / 2));
-    Game.setBoard(3,b);
 
-
-    this.health -= damage;
-    if (this.health <= 0) {
-      if (this.board.remove(this)) {
-        this.board.add(new Dead(this.x + this.w / 2,
-          this.y + this.h / 2));
-      }
-    }*/
 }
 
 
