@@ -2,7 +2,7 @@
 // Especifica lo que se debe pintar al cargar el juego
 var startGame = function() {
   Game.setBoard(0,new TitleScreen("Frogger", 
-                                  "Press space to start playing",
+                                  "Press fire to start playing",
                                   playGame));
 }
 
@@ -34,16 +34,16 @@ var playGame = function() {
 
 //Cambiar eñ nivel de board de aqui a 1. Que es el que resetea al volver a jugar
 var winGame = function() {
-  Game.setBoard(3,new TitleScreen("You win!", 
-                                  "Press space to play again",
+  Game.setBoard(1,new TitleScreen("You win!", 
+                                  "Press fire to play again",
                                   playGame));
 };
 
 
 
 var loseGame = function() {
-  Game.setBoard(3,new TitleScreen("You lose!", 
-                                  "Press space to play again",
+  Game.setBoard(1,new TitleScreen("You lose!", 
+                                  "Press fire to play again",
                                   playGame));
 };
 

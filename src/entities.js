@@ -262,7 +262,7 @@ Car.prototype.step = function (dt) {
   var collision = this.board.collide(this, OBJECT_PLAYER);
   if (collision) {
     collision.hit(this.damage);
-    //this.board.remove(3); hay que borrar el TitleScreen que esta en board 3
+    //this.board.remove(this); //hay que borrar el TitleScreen que esta en board 3
   }
 
 }
