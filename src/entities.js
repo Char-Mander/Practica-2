@@ -83,6 +83,7 @@ Background.prototype.step = function () { };
 
 
 // PLAYER
+var golpe = false; //Booleano que nos dice si ha colisionado la rana con algun objeto
 
 var Player = function () {
   var hasClicked = false;
@@ -104,109 +105,109 @@ var Player = function () {
 
 
   this.step = function (dt) {
-  if(!hasClicked){
-    hasClicked = true;
-    if (Game.keys['left']) {
-      this.vx = -this.maxVel;
-      dx = this.x - 40;
-      dy = this.y;
-      //this.x += 7.5*this.vx;
-
-     // this.frame = Math.floor(this.subFrame++ / 3);
-      while(this.x > this.dx){
-        this.x += parseInt(this.vx*dt);
-       /* if (this.subFrame >= 21) {
+    if(!hasClicked){
+      hasClicked = true;
+      if (Game.keys['left']) {
+        this.vx = -this.maxVel;
+        dx = this.x - 40;
+        dy = this.y;
+        //this.x += 7.5*this.vx;
+  
+       // this.frame = Math.floor(this.subFrame++ / 3);
+        while(this.x > this.dx){
+          this.x += parseInt(this.vx*dt);
+         /* if (this.subFrame >= 21) {
+            this.subFrame = 0;
+          }*/
+        }
+  
+       // if(this.x >= dx){
+        hasClicked = false;
+         // this.x += this.vx * dt;
+        //this.Frame = 0;
+        //}
+        
+      }
+      else if (Game.keys['right']) {
+        this.vx = this.maxVel;
+        dx = this.x + 40;
+        dy = this.y;
+        //this.x += 7.5*this.vx;
+  
+       // this.frame = Math.floor(this.subFrame++ / 3);
+        //this.x += this.vx * dt;
+        while(this.x < dx){
+          this.x += parseInt(this.vx*dt);
+        }
+        
+        /*if (this.subFrame >= 21) {
           this.subFrame = 0;
         }*/
+        
       }
-
-     // if(this.x >= dx){
-      hasClicked = false;
-       // this.x += this.vx * dt;
-      //this.Frame = 0;
-      //}
-      
-    }
-    else if (Game.keys['right']) {
-      this.vx = this.maxVel;
-      dx = this.x + 40;
-      dy = this.y;
-      //this.x += 7.5*this.vx;
-
-     // this.frame = Math.floor(this.subFrame++ / 3);
-      //this.x += this.vx * dt;
-      while(this.x < dx){
-        this.x += parseInt(this.vx*dt);
+      else if (Game.keys['down']) {
+        this.vy = -this.maxVel;
+        this.y += 7.5*this.vy;
+  
+        this.frame = Math.floor(this.subFrame++ / 3);
+        
+        while(this)
+        //this.y += this.vy * dt;
+       
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+        }
+        
       }
-      
-      /*if (this.subFrame >= 21) {
-        this.subFrame = 0;
-      }*/
-      
-    }
-    else if (Game.keys['down']) {
-      this.vy = -this.maxVel;
-      this.y += 7.5*this.vy;
-
-      this.frame = Math.floor(this.subFrame++ / 3);
-      
-      while(this)
-      //this.y += this.vy * dt;
-     
-      if (this.subFrame >= 21) {
-        this.subFrame = 0;
+      else if (Game.keys['up']) {
+        this.vy = this.maxVel;
+        this.y += 7.5*this.vy;
+  
+        this.frame = Math.floor(this.subFrame++ / 3);
+        //this.y += this.vy * dt;
+       
+        if (this.subFrame >= 21) {
+          this.subFrame = 0;
+        }
+        
       }
-      
-    }
-    else if (Game.keys['up']) {
-      this.vy = this.maxVel;
-      this.y += 7.5*this.vy;
-
-      this.frame = Math.floor(this.subFrame++ / 3);
-      //this.y += this.vy * dt;
-     
-      if (this.subFrame >= 21) {
+      else {
+        //Booleano que si no esta en el tronco, la x sea la que pulsemos
+        if(!this.enTronco){
+          this.vx = 0;
+        }
+  
+      this.vy = 0;
+      this.x += this.vx*dt; //cambiar!!
+      this.y += this.vy;    	
+      }
+  
+  
+      if (this.x < 0) {
+        this.x = 0;
         this.subFrame = 0;
       }
-      
-    }
-    else {
-    	//Booleano que si no esta en el tronco, la x sea la que pulsemos
-    	if(!this.enTronco){
-    		this.vx = 0;
+      else if (this.x > Game.width - this.w) {
+        this.x = Game.width - this.w;
+        this.subFrame = 0;
       }
-
-		this.vy = 0;
-		this.x += this.vx*dt; //cambiar!!
-		this.y += this.vy;    	
+  
+      if (this.y < 0) {
+        this.y = 0;
+        this.subFrame = 0;
+      }
+      else if (this.y > Game.height - this.h) {
+        this.y = Game.height - this.h;
+        this.subFrame = 0;
+      }
+  
+      this.reload -= dt;
+      //Cada vez que hay un step, se resetea el estatus en el tronco
+      this.enTronco = false;
+      this.hasClicked = true;
+  
     }
-
-
-    if (this.x < 0) {
-      this.x = 0;
-      this.subFrame = 0;
-    }
-    else if (this.x > Game.width - this.w) {
-      this.x = Game.width - this.w;
-      this.subFrame = 0;
-    }
-
-    if (this.y < 0) {
-      this.y = 0;
-      this.subFrame = 0;
-    }
-    else if (this.y > Game.height - this.h) {
-      this.y = Game.height - this.h;
-      this.subFrame = 0;
-    }
-
-    this.reload -= dt;
-    //Cada vez que hay un step, se resetea el estatus en el tronco
-    this.enTronco = false;
-    this.hasClicked = true;
-
   }
-}
 
 }
 
@@ -214,18 +215,25 @@ Player.prototype = new Sprite();
 Player.prototype.type = OBJECT_PLAYER;
 
 Player.prototype.hit = function (damage) {
+	var a = this.x;
+	var b = this.y;
+	Game.boardLevel2 = this.board;
+
   if (this.board.remove(this)) {
-    loseGame();
-  }
+  		Game.boardLevel2.add(new Death(a,b));
+  		//Game.setBoard(1,nuevoboard); //intentar que 
+  		loseGame();
+  	}
+  
 }
 
 
 ///// DEAD
 
 var Death = function (centerX, centerY) {
-  this.setup('orange_skull', { frame: 0 });
-  this.x = centerX - this.w / 2;
-  this.y = centerY - this.h / 2;
+  this.setup('orange_skull', {vx:0, frame: 0, reloadTime: 0, maxVel: 0 });
+  this.x = centerX;
+  this.y = centerY;
   this.subFrame = 0;
 };
 
@@ -283,19 +291,14 @@ Car.prototype.step = function (dt) {
 
 }
 
-Car.prototype.hit = function (damage) {
+Car.prototype.hit = function (damage) { //El coche solo deberia matar la rana
   this.health -= damage;
-  //var die = new Death(this.x + this.w/2,this.y + this.h / 2);
-  //die.draw(ctx);
-  //this.board.add(die);
-  var b = new GameBoard();
-  b.add(new Death(this.x + this.w / 2,
+
+Game.board.add(new Death(this.x + this.w / 2,
         this.y + this.h / 2));
-    Game.setBoard(3,b);
 
   if (this.health <= 0) {
     if (this.board.remove(this)) {
-
       Game.board.add(new Death(this.x + this.w / 2,
         this.y + this.h / 2));
     }
