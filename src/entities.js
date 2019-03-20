@@ -83,6 +83,7 @@ Background.prototype.step = function () { };
 
 
 // PLAYER
+var golpe = false; //Booleano que nos dice si ha colisionado la rana con algun objeto
 
 var Player = function () {
   var hasClicked = false;
@@ -198,18 +199,25 @@ Player.prototype = new Sprite();
 Player.prototype.type = OBJECT_PLAYER;
 
 Player.prototype.hit = function (damage) {
+	var a = this.x;
+	var b = this.y;
+	Game.boardLevel2 = this.board;
+
   if (this.board.remove(this)) {
-    loseGame();
-  }
+  		Game.boardLevel2.add(new Death(a,b));
+  		//Game.setBoard(1,nuevoboard); //intentar que 
+  		loseGame();
+  	}
+  
 }
 
 
 ///// DEAD
 
 var Death = function (centerX, centerY) {
-  this.setup('orange_skull', { frame: 0 });
-  this.x = centerX - this.w / 2;
-  this.y = centerY - this.h / 2;
+  this.setup('orange_skull', {vx:0, frame: 0, reloadTime: 0, maxVel: 0 });
+  this.x = centerX;
+  this.y = centerY;
   this.subFrame = 0;
 };
 
@@ -267,19 +275,14 @@ Car.prototype.step = function (dt) {
 
 }
 
-Car.prototype.hit = function (damage) {
+Car.prototype.hit = function (damage) { //El coche solo deberia matar la rana
   this.health -= damage;
-  //var die = new Death(this.x + this.w/2,this.y + this.h / 2);
-  //die.draw(ctx);
-  //this.board.add(die);
-  var b = new GameBoard();
-  b.add(new Death(this.x + this.w / 2,
+
+Game.board.add(new Death(this.x + this.w / 2,
         this.y + this.h / 2));
-    Game.setBoard(3,b);
 
   if (this.health <= 0) {
     if (this.board.remove(this)) {
-
       Game.board.add(new Death(this.x + this.w / 2,
         this.y + this.h / 2));
     }
