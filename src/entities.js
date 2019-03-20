@@ -42,7 +42,7 @@ var OBJECT_PLAYER = 1,
   OBJECT_WATER = 32;
 
 //Se resetea el valor al final de step de Player
-var enTronco =false; //Para saber si esta en el tronco
+var enTronco = false; //Para saber si esta en el tronco
 
 
 /// CLASE PADRE SPRITE
@@ -83,16 +83,11 @@ Background.prototype.step = function () { };
 
 
 // PLAYER
-  var enTronco = false; //Para saber si esta en el tronco
-
 
 var Player = function () {
-  var dx, dy, moving;
+  var hasClicked = false;
 
-
-	//Declararlo fuera, lo pongo a false en trunk
-
-  this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 150 });
+  this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 1});
 
   this.x = Game.width / 2 - this.w / 2;
   this.y = Game.height + this.h / 2;
@@ -108,58 +103,56 @@ var Player = function () {
 
 
   this.step = function (dt) {
-    
+  if(!hasClicked){
+    this.hasClicked = true;
     if (Game.keys['left']) {
-      if (this.moving !== true || this.moving === undefined) {
-        this.moving = true;
-        this.dx = this.x - 40;
-        this.dy = this.y;
-        this.vx = -this.maxVel;
-        this.frame = Math.floor(this.subFrame++ / 3);
-        this.x -= this.vx*dt;
-        if (this.subFrame >= 21) {
-          this.subFrame = 0;
-        }
+      this.vx = -this.maxVel;
+      this.x += 7.5*this.vx;
+
+      this.frame = Math.floor(this.subFrame++ / 3);
+      //this.x += this.vx * dt;
+     
+      if (this.subFrame >= 21) {
+        this.subFrame = 0;
       }
+      
     }
     else if (Game.keys['right']) {
-      if (this.moving !== true || this.moving === undefined) {
-        this.moving = true;
-        this.dx = this.x + 40;
-        this.dy = this.y;
-        this.vx = this.maxVel;
-        this.frame = Math.floor(this.subFrame++ / 3);
-        this.x += this.vx*dt;
-        if (this.subFrame >= 21) {
-          this.subFrame = 0;
-        }
+      this.vx = this.maxVel;
+      this.x += 7.5*this.vx;
+
+      this.frame = Math.floor(this.subFrame++ / 3);
+      //this.x += this.vx * dt;
+
+      
+      if (this.subFrame >= 21) {
+        this.subFrame = 0;
       }
+      
     }
     else if (Game.keys['down']) {
-      if (this.moving !== true || this.moving === undefined) {
-        this.moving = true;
-        this.dx = this.x;
-        this.dy = this.y - 40;
-        this.vy = -this.maxVel;
-        this.frame = Math.floor(this.subFrame++ / 3);
-        this.y -= this.vy*dt;
-        if (this.subFrame >= 21) {
-          this.subFrame = 0;
-        }
+      this.vy = -this.maxVel;
+      this.y += 7.5*this.vy;
+
+      this.frame = Math.floor(this.subFrame++ / 3);
+      //this.y += this.vy * dt;
+     
+      if (this.subFrame >= 21) {
+        this.subFrame = 0;
       }
+      
     }
     else if (Game.keys['up']) {
-      if (this.moving !== true || this.moving === undefined) {
-        this.moving = true;
-        this.dx = this.x;
-        this.dy = this.y + 40;
-        this.vy = this.maxVel;
-        this.frame = Math.floor(this.subFrame++ / 3);
-        this.y += this.vy*dt;
-        if (this.subFrame >= 21) {
-          this.subFrame = 0;
-        }
+      this.vy = this.maxVel;
+      this.y += 7.5*this.vy;
+
+      this.frame = Math.floor(this.subFrame++ / 3);
+      //this.y += this.vy * dt;
+     
+      if (this.subFrame >= 21) {
+        this.subFrame = 0;
       }
+      
     }
     else {
     	//Booleano que si no esta en el tronco, la x sea la que pulsemos
@@ -168,12 +161,8 @@ var Player = function () {
       }
 
 		this.vy = 0;
-		this.x += this.vx * dt;
-		this.y += this.vy * dt;
-    }
-
-    if(this.x === dx && this.y === dy){
-      this.moving = false;
+		this.x += this.vx*dt; //cambiar!!
+		this.y += this.vy;    	
     }
 
 
@@ -196,18 +185,12 @@ var Player = function () {
     }
 
     this.reload -= dt;
-
     //Cada vez que hay un step, se resetea el estatus en el tronco
     this.enTronco = false;
+    this.hasClicked = true;
 
-    console.log("Se está moviendo: " + moving);
-    console.log("Coordenadas destino: (" + dx + ", " + dy + ")");
-    console.log("Velocidad: (" + this.vx + ", " + this.vy + ")");
   }
-
-
-
-  
+}
 
 }
 
@@ -238,15 +221,13 @@ Death.prototype.step = function (dt) {
 };
 
 
-/// CARs
-//E: movimiento vertical.
-//A: movimiento horizontal
+/// CARS
 var cars = {
-  cblue: { x: -50, y: 435, sprite: 'blue_car', health: 10, A: 60 },
-  cgreen: { x: -50, y: 385, sprite: 'green_car', health: 10, A: 50 },
-  cyellow: { x: -50, y: 335, sprite: 'yellow_car', health: 10, A: 70 },
-  vwhite: { x: -50, y: 480, sprite: 'white_van', health: 10, A: 50 },
-  vbrown: { x: 550, y: 525, sprite: 'brown_van', health: 10, A: -50 }
+  cblue:     { x: -50,   y: 435, sprite: 'blue_car', health: 10, A: 60 },
+  cgreen:    { x: -50,   y: 385, sprite: 'green_car', health: 10, A: 50 },
+  cyellow:   { x: -50,   y: 335, sprite: 'yellow_car', health: 10, A: 70},
+  vwhite: { x: -50,   y: 480, sprite: 'white_van', health: 10, A: 50 },              
+  vbrown: { x: 550,   y: 525, sprite: 'brown_van', health: 10, A: -50}
 };
 
 
@@ -281,6 +262,7 @@ Car.prototype.step = function (dt) {
   var collision = this.board.collide(this, OBJECT_PLAYER);
   if (collision) {
     collision.hit(this.damage);
+    //this.board.remove(3); hay que borrar el TitleScreen que esta en board 3
   }
 
 }
@@ -290,10 +272,15 @@ Car.prototype.hit = function (damage) {
   //var die = new Death(this.x + this.w/2,this.y + this.h / 2);
   //die.draw(ctx);
   //this.board.add(die);
+  var b = new GameBoard();
+  b.add(new Death(this.x + this.w / 2,
+        this.y + this.h / 2));
+    Game.setBoard(3,b);
+
   if (this.health <= 0) {
     if (this.board.remove(this)) {
 
-      this.board.add(new Death(this.x + this.w / 2,
+      Game.board.add(new Death(this.x + this.w / 2,
         this.y + this.h / 2));
     }
   }
@@ -306,7 +293,6 @@ var trunks = {    //A: movimiento horizontal
   lwood:  { x: 0,   y: 150, sprite: 'large_wood', health: 10, A:15},//40
   turtle1: { x: 0,   y: 200, sprite: 'turtle', health: 10, A:15},//20
   turtle2: { x: 0,   y: 100, sprite: 'turtle', health: 10, A:10}//40
-
 
 };
 
@@ -368,12 +354,18 @@ Water.prototype.step = function (dt) {
     var collisionTrunk = this.board.collide(OBJECT_PLAYER, OBJECT_TRUNK);
 
     if(collision)
-        if(!collisionTrunk)
+        if(!enTronco)
         collision.hit(this.damage);
 
   }
 
 Water.prototype.hit = function (damage) {
+  var b = new GameBoard();
+  b.add(new Death(this.x + this.w / 2,
+        this.y + this.h / 2));
+    Game.setBoard(3,b);
+
+
     this.health -= damage;
     if (this.health <= 0) {
       if (this.board.remove(this)) {
