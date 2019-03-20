@@ -34,7 +34,7 @@ var playGame = function() {
 
 //Cambiar eñ nivel de board de aqui a 1. Que es el que resetea al volver a jugar
 var winGame = function() {
-  Game.setBoard(3,new TitleScreen("You win!", 
+  Game.setBoard(1,new TitleScreen("You win!", 
                                   "Press fire to play again",
                                   playGame));
 };
@@ -42,7 +42,7 @@ var winGame = function() {
 
 
 var loseGame = function() {
-  Game.setBoard(3,new TitleScreen("You lose!", 
+  Game.setBoard(1,new TitleScreen("You lose!", 
                                   "Press fire to play again",
                                   playGame));
 };
