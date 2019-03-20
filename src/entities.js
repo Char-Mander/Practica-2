@@ -30,7 +30,8 @@ var sprites = {
 
   title: { sx: 8, sy: 395, w: 261, h: 164, frames: 1 },
   background: { sx: 421, sy: 0, w: 550, h: 625, frames: 1 },
-  water: { sx: 421, sy: 55, w: 615, h: 242, frames: 1 },
+
+  water: { sx: -150, sy: 563, w: 550, h: 242, frames: 1 } //Sprite transparente
 
 };
 
@@ -42,7 +43,7 @@ var OBJECT_PLAYER = 1,
   OBJECT_WATER = 32;
 
 //Se resetea el valor al final de step de Player
-var enTronco = false; //Para saber si esta en el tronco
+//var enTronco = false; //Para saber si esta en el tronco
 
 
 /// CLASE PADRE SPRITE
@@ -163,9 +164,13 @@ var Player = function () {
 
 		this.vy = 0;
 		this.x += this.vx*dt; //cambiar!!
-		this.y += this.vy;    	
+		this.y += this.vy; 
+
+		  	
     }
 
+	if(this.y === 0)
+    		winGame(); 
 
     if (this.x < 0) {
       this.x = 0;
@@ -184,6 +189,8 @@ var Player = function () {
       this.y = Game.height - this.h;
       this.subFrame = 0;
     }
+
+
 
     this.reload -= dt;
     //Cada vez que hay un step, se resetea el estatus en el tronco
@@ -233,7 +240,7 @@ Death.prototype.step = function (dt) {
 var cars = {
   cblue:     { x: -50,   y: 435, sprite: 'blue_car', health: 10, A: 60 },
   cgreen:    { x: -50,   y: 385, sprite: 'green_car', health: 10, A: 50 },
-  cyellow:   { x: -50,   y: 335, sprite: 'yellow_car', health: 10, A: 70},
+  cyellow:   { x: -50,   y: 337, sprite: 'yellow_car', health: 10, A: 70},
   vwhite: { x: -50,   y: 480, sprite: 'white_van', health: 10, A: 50 },              
   vbrown: { x: 550,   y: 525, sprite: 'brown_van', health: 10, A: -50}
 };
@@ -330,22 +337,18 @@ Trunk.prototype.step = function (dt) {
 
   var collision = this.board.collide(this, OBJECT_PLAYER);
   if (collision) {
-  	 Game.frogP.onTrunk(this.vx); 
+  	 collision.onTrunk(this.vx); 
   }
 }
 
 
 //WATER
 
-var agua = {
-    a:  { x: 0, y: 50, sprite: 'water', health: 20},
-}
-//Idea: pintar el agua por encima del background
 var Water = function(){
   //Rango: 0-618x270 hay agua
   this.setup('water', { vx: 0, frame: 0, reloadTime: 0, maxVel: 0 });
   this.x = 0;
-  this.y = 52;
+  this.y = 50;
 }
 
 Water.prototype = new Sprite();
@@ -354,16 +357,15 @@ Water.prototype.type = OBJECT_WATER;
 Water.prototype.step = function (dt) {
     //Si player toca el agua
     var collision = this.board.collide(this, OBJECT_PLAYER);
-    var collisionTrunk = this.board.collide(OBJECT_PLAYER, OBJECT_TRUNK);
 
     if(collision)
-        if(!enTronco)
+        if(!collision.enTronco)
         collision.hit(this.damage);
 
   }
 
 Water.prototype.hit = function (damage) {
-  var b = new GameBoard();
+  /*var b = new GameBoard();
   b.add(new Death(this.x + this.w / 2,
         this.y + this.h / 2));
     Game.setBoard(3,b);
@@ -375,7 +377,7 @@ Water.prototype.hit = function (damage) {
         this.board.add(new Dead(this.x + this.w / 2,
           this.y + this.h / 2));
       }
-    }
+    }*/
 }
 
 

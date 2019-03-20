@@ -19,17 +19,18 @@ var playGame = function() {
   Game.setBoard(2,boardLevel2);//Resetea el fondo 2
 
   Game.setBoard(0,new Background()); //Pantalla de juego
-  board.add(new Car(cars.cgreen));
+  /*board.add(new Car(cars.cgreen));
   board.add(new Car(cars.cyellow));
   board.add(new Car(cars.cblue));
   board.add(new Car(cars.vwhite));
-  board.add(new Car(cars.vbrown));
-  board.add(new Water());
+  board.add(new Car(cars.vbrown));*/
   board.add(new Trunk(trunks.swood));
   board.add(new Trunk(trunks.mwood));
   board.add(new Trunk(trunks.lwood));
   board.add(new Trunk(trunks.turtle1));
   board.add(new Trunk(trunks.turtle2));
+
+    board.add(new Water());
 
   Game.frogP = new Player();
   board.add(Game.frogP);
