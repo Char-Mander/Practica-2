@@ -17,6 +17,7 @@ var startGame = function() {
 
 
 var playGame = function() {
+  var orden = [new Spawner(objetos), new Water(), new Home(), new Player];
 
   boardIni = new GameBoard();
   boardIni.add(new Background());
@@ -27,25 +28,18 @@ var playGame = function() {
   boardLevel2 = new GameBoard();
   Game.setBoard(2,boardLevel2);//Resetea el fondo 2
 
-  /*board.add(new Car(cars.cgreen));
-  board.add(new Car(cars.cyellow));
-  board.add(new Car(cars.cblue));
-  board.add(new Car(cars.vwhite));
-  board.add(new Car(cars.vbrown));*/
-  board.add(new Trunk(trunks.swood));
-  board.add(new Trunk(trunks.mwood));
-  board.add(new Trunk(trunks.lwood));
-  board.add(new Trunk(trunks.turtle1));
-  board.add(new Trunk(trunks.turtle2));
+ /* board.add(new Spawner(objetos));
 
   board.add(new Water());
   board.add(new Home());
 
   Game.frogP = new Player();
-  board.add(Game.frogP);
+  board.add(Game.frogP);*/
+  for(var i = 0, len = orden.length; i < len; i++)
+    board.add(orden[i]);
 
   Game.setBoard(1,board);
-  //Game.setBoard(2,new Level(level1,winGame)); //Crea el nivel con los enemigos  
+  //Game.setBoard(2,new Spawner(coches,winGame)); //Crea el nivel con los enemigos  
 }
 
 var winGame = function() {
