@@ -24,7 +24,7 @@ var playGame = function() {
   board.add(new Car(cars.cblue));
   board.add(new Car(cars.vwhite));
   board.add(new Car(cars.vbrown));
-  board.add(new Water());
+  //board.add(new Water());
   board.add(new Trunk(trunks.swood));
   board.add(new Trunk(trunks.mwood));
   board.add(new Trunk(trunks.lwood));
