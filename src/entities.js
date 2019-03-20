@@ -31,8 +31,8 @@ var sprites = {
   title: { sx: 8, sy: 395, w: 261, h: 164, frames: 1 },
   background: { sx: 421, sy: 0, w: 550, h: 625, frames: 1 },
 
-  water: { sx: -150, sy: 563, w: 550, h: 242, frames: 1 } //Sprite transparente
-
+  water: { sx: -150, sy: 563, w: 550, h: 242, frames: 1 }, //Sprite transparente
+  winner: { sx: -150, sy: 563, w: 550, h: 20, frames: 1 } //Sprite transparente
 };
 
 var OBJECT_PLAYER = 1,
@@ -84,8 +84,10 @@ Background.prototype.step = function () { };
 
 //TITLE
 
-var Title = function () {
+var Title = function (centerX, centerY) {
   this.setup('title', {vx:0, frame: 0, reloadTime: 0, maxVel: 0 });
+  this.x = centerX;
+  this.y = centerY;
 };
 
 Title.prototype = new Sprite();
@@ -97,7 +99,6 @@ Title.prototype.step = function (dt) {
 
 
 // PLAYER
-var golpe = false; //Booleano que nos dice si ha colisionado la rana con algun objeto
 
 var Player = function () {
   var hasClicked = false;
@@ -175,15 +176,11 @@ var Player = function () {
     		this.vx = 0;
       }
 
-		this.vy = 0;
-		this.x += this.vx*dt; //cambiar!!
-		this.y += this.vy; 
-
-		  	
+		  this.vy = 0;
+		  this.x += this.vx*dt; //cambiar!!
+		  this.y += this.vy; 
     }
 
-	if(this.y === 0)
-    		winGame(); 
 
     if (this.x < 0) {
       this.x = 0;
@@ -380,6 +377,27 @@ Water.prototype.step = function (dt) {
 Water.prototype.hit = function (damage) {
 
 }
+
+//HOME
+
+var Home = function(){
+  this.setup('winner', { vx: 0, frame: 0, reloadTime: 0, maxVel: 0 }); //Zona verde, para ganar
+  this.x = 0;
+  this.y = 0;
+}
+
+Home.prototype = new Sprite();
+//Water.prototype.type = OBJECT_WATER;
+
+Home.prototype.step = function (dt) {
+    var collision = this.board.collide(this, OBJECT_PLAYER);
+
+    if(collision)
+       winGame();
+}
+
+
+
 
 
 

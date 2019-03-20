@@ -10,7 +10,7 @@ var startGame = function() {
   boardIni.add(new TitleScreen("", 
                                   "Press fire to start playing",
                                   playGame));
-  boardIni.add(new Title()); //Pinta sprite del titulo
+  boardIni.add(new Title(150,150)); //Pinta sprite del titulo
 
   Game.setBoard(0,boardIni);
 }
@@ -23,7 +23,7 @@ var playGame = function() {
   Game.setBoard(0,boardIni); //Pantalla de juego
   board = new GameBoard(); //Fondo para background y coches, tronco, rana...
 
-  /*### Crea el fondo (nivel 2) que contendra la calavera si pierde y los mensajes win o lose ###*/
+  //Crea el fondo (nivel 2) que contendra la calavera si pierde y los mensajes win o lose
   boardLevel2 = new GameBoard();
   Game.setBoard(2,boardLevel2);//Resetea el fondo 2
 
@@ -38,7 +38,8 @@ var playGame = function() {
   board.add(new Trunk(trunks.turtle1));
   board.add(new Trunk(trunks.turtle2));
 
-    board.add(new Water());
+  board.add(new Water());
+  board.add(new Home());
 
   Game.frogP = new Player();
   board.add(Game.frogP);
