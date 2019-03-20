@@ -86,6 +86,7 @@ Background.prototype.step = function () { };
 
 var Player = function () {
   var hasClicked = false;
+  var dx, dy;
 
   this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 1});
 
@@ -104,30 +105,43 @@ var Player = function () {
 
   this.step = function (dt) {
   if(!hasClicked){
-    this.hasClicked = true;
+    hasClicked = true;
     if (Game.keys['left']) {
       this.vx = -this.maxVel;
-      this.x += 7.5*this.vx;
+      dx = this.x - 40;
+      dy = this.y;
+      //this.x += 7.5*this.vx;
 
-      this.frame = Math.floor(this.subFrame++ / 3);
-      //this.x += this.vx * dt;
-     
-      if (this.subFrame >= 21) {
-        this.subFrame = 0;
+     // this.frame = Math.floor(this.subFrame++ / 3);
+      while(this.x > this.dx){
+        this.x += parseInt(this.vx*dt);
+       /* if (this.subFrame >= 21) {
+          this.subFrame = 0;
+        }*/
       }
+
+     // if(this.x >= dx){
+      hasClicked = false;
+       // this.x += this.vx * dt;
+      //this.Frame = 0;
+      //}
       
     }
     else if (Game.keys['right']) {
       this.vx = this.maxVel;
-      this.x += 7.5*this.vx;
+      dx = this.x + 40;
+      dy = this.y;
+      //this.x += 7.5*this.vx;
 
-      this.frame = Math.floor(this.subFrame++ / 3);
+     // this.frame = Math.floor(this.subFrame++ / 3);
       //this.x += this.vx * dt;
-
-      
-      if (this.subFrame >= 21) {
-        this.subFrame = 0;
+      while(this.x < dx){
+        this.x += parseInt(this.vx*dt);
       }
+      
+      /*if (this.subFrame >= 21) {
+        this.subFrame = 0;
+      }*/
       
     }
     else if (Game.keys['down']) {
@@ -135,6 +149,8 @@ var Player = function () {
       this.y += 7.5*this.vy;
 
       this.frame = Math.floor(this.subFrame++ / 3);
+      
+      while(this)
       //this.y += this.vy * dt;
      
       if (this.subFrame >= 21) {
