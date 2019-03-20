@@ -1,24 +1,23 @@
-/*
+
 // Especifica lo que se debe pintar al cargar el juego
 var startGame = function() {
   Game.setBoard(0,new TitleScreen("Frogger", 
-                                  "Press space to start playing",
+                                  "Press fire to start playing",
                                   playGame));
 }
-*/
 
-var frog;
+var board; 
 
 var playGame = function() {
 
-  var board = new GameBoard();
-  
+  board = new GameBoard();
   Game.setBoard(0,new Background()); //Pantalla de juego
   board.add(new Car(cars.cgreen));
   board.add(new Car(cars.cyellow));
   board.add(new Car(cars.cblue));
   board.add(new Car(cars.vwhite));
   board.add(new Car(cars.vbrown));
+  board.add(new Water());
   board.add(new Trunk(trunks.swood));
   board.add(new Trunk(trunks.mwood));
   board.add(new Trunk(trunks.lwood));
@@ -33,12 +32,10 @@ var playGame = function() {
   //Game.setBoard(2,new Level(level1,winGame)); //Crea el nivel con los enemigos  
 }
 
-//var createPlayer = function(){ Game.frogP = new Player();};
-
-
+//Cambiar eñ nivel de board de aqui a 1. Que es el que resetea al volver a jugar
 var winGame = function() {
   Game.setBoard(3,new TitleScreen("You win!", 
-                                  "Press space to play again",
+                                  "Press fire to play again",
                                   playGame));
 };
 
@@ -46,7 +43,7 @@ var winGame = function() {
 
 var loseGame = function() {
   Game.setBoard(3,new TitleScreen("You lose!", 
-                                  "Press space to play again",
+                                  "Press fire to play again",
                                   playGame));
 };
 
@@ -56,5 +53,5 @@ var loseGame = function() {
 // y este después de realizar la inicialización llamará a
 // startGame
 window.addEventListener("load", function() {
-  Game.initialize("game",sprites,playGame);
+  Game.initialize("game",sprites,startGame);
 });
