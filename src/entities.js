@@ -97,14 +97,13 @@ Title.prototype.step = function (dt) { };
 // PLAYER
 
 var Player = function () {
-  var hasClicked = false;
 
   this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 1 });
 
   this.x = Game.width / 2 - this.w / 2;
   this.y = Game.height + this.h / 2;
   this.reload = this.reloadTime;
-  this.subFrame = 0;
+  
 
   //Metodo que mantiene a la rana encima del tronco
   this.onTrunk = function (vt) {
@@ -152,31 +151,24 @@ var Player = function () {
         }
 
         this.vy = 0;
-        this.x += this.vx * dt; //cambiar!!
+        this.x += this.vx * dt; 
         this.y += this.vy;
       }
 
 
       if (this.x < 0) {
         this.x = 0;
-        this.subFrame = 0;
       }
       else if (this.x > Game.width - this.w) {
         this.x = Game.width - this.w;
-        this.subFrame = 0;
       }
 
       if (this.y < 0) {
         this.y = 0;
-        this.subFrame = 0;
       }
       else if (this.y > Game.height - this.h) {
         this.y = Game.height - this.h;
-        this.subFrame = 0;
       }
-
-
-
 
       //Cada vez que hay un step, se resetea el estatus en el tronco
       this.enTronco = false;
