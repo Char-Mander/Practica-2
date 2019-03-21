@@ -91,11 +91,7 @@ var Title = function (centerX, centerY) {
 };
 
 Title.prototype = new Sprite();
-//Title.prototype.type = OBJECT_DEATH;
-
-Title.prototype.step = function (dt) {
-    //this.board.remove(this);
-};
+Title.prototype.step = function (dt) {};
 
 
 // PLAYER
@@ -222,7 +218,6 @@ Player.prototype.hit = function (damage) {
 
   if (this.board.remove(this)) {
   		Game.boardLevel2.add(new Death(a,b));
-  		//Game.setBoard(1,nuevoboard); //intentar que 
   		loseGame();
   	}
   
@@ -240,18 +235,15 @@ var Death = function (centerX, centerY) {
 
 Death.prototype = new Sprite();
 Death.prototype.type = OBJECT_DEATH;
-
-Death.prototype.step = function (dt) {
-    //this.board.remove(this);
-};
+Death.prototype.step = function (dt) {};
 
 
 /// CARS
 var cars = {
-  cblue:     { x: -50,   y: 435, sprite: 'blue_car', health: 10, A: 60 },
-  cgreen:    { x: -50,   y: 385, sprite: 'green_car', health: 10, A: 50 },
-  cyellow:   { x: -50,   y: 337, sprite: 'yellow_car', health: 10, A: 70},
-  vwhite: { x: -50,   y: 480, sprite: 'white_van', health: 10, A: 50 },              
+  cblue:     { x: -90,   y: 435, sprite: 'blue_car', health: 10, A: 60 },
+  cgreen:    { x: -95,   y: 385, sprite: 'green_car', health: 10, A: 50 },
+  cyellow:   { x: -95,   y: 337, sprite: 'yellow_car', health: 10, A: 70},
+  vwhite: { x: -125,   y: 480, sprite: 'white_van', health: 10, A: 50 },              
   vbrown: { x: 550,   y: 525, sprite: 'brown_van', health: 10, A: -50}
 };
 
@@ -287,12 +279,10 @@ Car.prototype.step = function (dt) {
   var collision = this.board.collide(this, OBJECT_PLAYER);
   if (collision) {
     collision.hit(this.damage);
-    //this.board.remove(this); //hay que borrar el TitleScreen que esta en board 3
   }
-
 }
 
-Car.prototype.hit = function (damage) { //El coche solo deberia matar la rana
+Car.prototype.hit = function (damage) { 
   this.health -= damage;
 
 Game.board.add(new Death(this.x + this.w / 2,
@@ -306,14 +296,14 @@ Game.board.add(new Death(this.x + this.w / 2,
   }
 }
 
+
 /// TRUNK (TRONCOS)
 var trunks = {    //A: movimiento horizontal
-  swood:  { x: 0, y: 250, sprite: 'small_wood', health: 20, A: 40}, //50
-  mwood:  { x: 550,   y: 50, sprite: 'medium_wood', health: 10, A:-30}, //-30
-  lwood:  { x: 0,   y: 150, sprite: 'large_wood', health: 10, A:35},//40
-  turtle1: { x: 0,   y: 200, sprite: 'turtle', health: 10, A:35},//20
-  turtle2: { x: 0,   y: 100, sprite: 'turtle', health: 10, A:40}//40
-
+  swood:  { x: -130, y: 250, sprite: 'small_wood', health: 20, A: 40},
+  mwood:  { x: 550,   y: 50, sprite: 'medium_wood', health: 10, A:-30}, 
+  lwood:  { x: -247,   y: 150, sprite: 'large_wood', health: 10, A:35},
+  turtle1: { x: -40,   y: 200, sprite: 'turtle', health: 10, A:35},
+  turtle2: { x: -40,   y: 100, sprite: 'turtle', health: 10, A:40}
 };
 
 
@@ -355,7 +345,6 @@ Trunk.prototype.step = function (dt) {
 //WATER
 
 var Water = function(){
-  //Rango: 0-618x270 hay agua
   this.setup('water', { vx: 0, frame: 0, reloadTime: 0, maxVel: 0 });
   this.x = 0;
   this.y = 50;
@@ -365,18 +354,14 @@ Water.prototype = new Sprite();
 Water.prototype.type = OBJECT_WATER;
 
 Water.prototype.step = function (dt) {
-    //Si player toca el agua
     var collision = this.board.collide(this, OBJECT_PLAYER);
 
     if(collision)
         if(!collision.enTronco)
         collision.hit(this.damage);
-
-  }
-
-Water.prototype.hit = function (damage) {
-
 }
+
+Water.prototype.hit = function (damage) {}
 
 //HOME
 
@@ -387,7 +372,6 @@ var Home = function(){
 }
 
 Home.prototype = new Sprite();
-//Water.prototype.type = OBJECT_WATER;
 
 Home.prototype.step = function (dt) {
     var collision = this.board.collide(this, OBJECT_PLAYER);

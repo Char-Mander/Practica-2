@@ -17,7 +17,7 @@ var startGame = function() {
 
 
 var playGame = function() {
-  var orden = [new Spawner(objetos), new Water(), new Home(), new Player];
+  var orden = [new Water(), new Home(), new Spawner(objetos), new Player()];
 
   boardIni = new GameBoard();
   boardIni.add(new Background());
@@ -28,18 +28,10 @@ var playGame = function() {
   boardLevel2 = new GameBoard();
   Game.setBoard(2,boardLevel2);//Resetea el fondo 2
 
- /* board.add(new Spawner(objetos));
-
-  board.add(new Water());
-  board.add(new Home());
-
-  Game.frogP = new Player();
-  board.add(Game.frogP);*/
   for(var i = 0, len = orden.length; i < len; i++)
     board.add(orden[i]);
 
   Game.setBoard(1,board);
-  //Game.setBoard(2,new Spawner(coches,winGame)); //Crea el nivel con los enemigos  
 }
 
 var winGame = function() {
