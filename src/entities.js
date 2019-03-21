@@ -103,7 +103,7 @@ Title.prototype.step = function (dt) {
 var Player = function () {
   var moving, dx, dy;
 
-  this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 100 });
+  this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 120 });
 
   this.x = Game.width / 2 - this.w / 2;
   this.y = Game.height + this.h / 2;
@@ -116,17 +116,12 @@ var Player = function () {
     if(!this.moving){
       this.vx = vt;
       dx = this.x;
-      dy = this.y;
     }
 
   }
 
   this.destinationReached = function () {
-    /*if(((this.x === dx && this.y === dy) || (this.x + 1 == dx && this.y === dy)
-      || (this.x - 1 == dx && this.y === dy) || (this.x === dx && this.y + 1 === dy)
-      || (this.x === dx && this.y - 1 === dy)))
-      moving = false;
-*/
+    
       if((this.vx < 0 && this.x < dx) || (this.vx > 0 && this.x > dx) 
       || (this.vy < 0 && this.y < dy) || (this.vy > 0 && this.y > dy)){
         moving = false;
@@ -146,6 +141,10 @@ var Player = function () {
         this.vy = 0;
         dx = this.x - 40;
         dy = this.y;
+        if (dx < 0) {
+          dx = 0;
+        }
+
       }
       else if (Game.keys['right']) {
         moving = true;
@@ -153,6 +152,9 @@ var Player = function () {
         this.vy = 0;
         dx = this.x + 40;
         dy = this.y;
+        if (dx > Game.width - this.w) {
+          dx = Game.width - this.w;
+        }
       }
       else if (Game.keys['down']) {
         moving = true;
@@ -160,6 +162,9 @@ var Player = function () {
         this.vy = -this.maxVel;
         dx = this.x;
         dy = this.y - 40;
+        if (dy < 0) {
+          dy = 0;
+        }
       }
       else if (Game.keys['up']) {
         moving = true;
@@ -167,6 +172,9 @@ var Player = function () {
         this.vy = this.maxVel;
         dx = this.x;
         dy = this.y + 40;
+        if (dy > Game.height - this.h) {
+          dy = Game.height - this.h;
+        }
       }
       else {
         //Booleano que si no esta en el tronco, la x sea la que pulsemos
@@ -174,57 +182,56 @@ var Player = function () {
           this.vx = 0;
         }
 
-        //this.vy = 0;
-        //Cada vez que hay un step, se resetea el estatus en el tronco
-        this.enTronco = false;
-        //this.x += this.vx*dt; //cambiar!!
-        //this.y += this.vy; 
       }
+      
+      if (this.x < 0) {
+        this.x = 0;
+        this.subFrame = 0;
+      }
+      else if (this.x > Game.width - this.w) {
+        this.x = Game.width - this.w;
+        this.subFrame = 0;
+      }
+  
+      if (this.y < 0) {
+        this.y = 0;
+        this.subFrame = 0;
+      }
+      else if (this.y > Game.height - this.h) {
+        this.y = Game.height - this.h;
+        this.subFrame = 0;
+      }
+
     }
 
-    if (this.x < 0) {
-      this.x = 0;
-      dx = this.x;
-      this.subFrame = 0;
-    }
-    else if (this.x > Game.width - this.w) {
-      this.x = Game.width - this.w;
-      this.subFrame = 0;
-    }
-
-    if (this.y < 0) {
-      this.y = 0;
-      dy = this.y;
-      this.subFrame = 0;
-    }
-    else if (this.y > Game.height - this.h) {
-      this.y = Game.height - this.h - 1;
-      dy = this.y;
-      this.subFrame = 0;
-    }
+    
     
     this.destinationReached();
-    
+
     if (moving) {
       //Cada vez que hay un step, se resetea el estatus en el tronco
-      this.enTronco = false;
+     // this.enTronco = false;
       //this.hasClicked = true;
-      this.frame = Math.floor(this.subFrame++ / 5);
-      if (this.subFrame >= 35) {
+      this.frame = Math.floor(this.subFrame++ / 4);
+      if (this.subFrame >= 28) {
         this.subFrame = 0;
         this.frame = 0;
       }
-      console.log("Llega a donde se cambian las coordenadas");
+  
       this.x += parseInt(this.vx * dt);
       this.y += parseInt(this.vy * dt);
     }
     
 
     this.reload -= dt;
+    //Cada vez que hay un step, se resetea el estatus en el tronco
+    this.enTronco = false;
+
     console.log("Se está moviendo: " + moving);
     console.log("Coordenadas destino: (" + dx + ", " + dy + ")");
     console.log("Coordenadas actuales: (" + this.x + ", " + this.y + ")");
     console.log("Velocidad: (" + this.vx + ", " + this.vy + ")    DT: " + dt);
+    console.log("Si está tocando tronco: " + this.enTronco);
   }
 
 }

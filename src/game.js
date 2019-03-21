@@ -17,7 +17,7 @@ var startGame = function() {
 
 
 var playGame = function() {
-  var orden = [new Spawner(objetos), new Water(), new Home(), new Player];
+  var orden = [new Spawner(objetos), new Water(), new Home(), new Player()];
 
   boardIni = new GameBoard();
   boardIni.add(new Background());
