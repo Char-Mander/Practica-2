@@ -82,20 +82,12 @@ var Game = new function() {
       analytics.draw(Game.ctx);
     }
     requestAnimationFrame(Game.loop);
-
-    //setTimeout(Game.loop,0);
-
-    //var dtstep = analytics.getDT()*1000;
-    //console.log(dtstep);
-    //setTimeout(Game.loop, 1000/fps - dtstep);
   };
 
   
   // Change an active game board
   this.setBoard = function(num,board) { boards[num] = board; };
 };
-
-
 
 
 var analytics = new function(){
@@ -239,6 +231,16 @@ var GameBoard = function() {
      }
   };
 
+
+  // Call the same method on all current objects 
+  this.reverseIterate = function(funcName) {
+     var args = Array.prototype.slice.call(arguments,1);
+     for(var i=this.objects.length-1; i >= 0; --i) {
+       var obj = this.objects[i];
+       obj[funcName].apply(obj,args);
+     }
+  };
+
   // Find the first object for which func is true
   this.detect = function(func) {
     for(var i = 0,val=null, len=this.objects.length; i < len; i++) {
@@ -258,7 +260,7 @@ var GameBoard = function() {
 
   // Draw all the objects
   this.draw= function(ctx) {
-    this.iterate('draw',ctx);
+    this.reverseIterate('draw',ctx);
   };
 
   this.overlap = function(o1,o2) {
@@ -275,5 +277,3 @@ var GameBoard = function() {
     });
   };
 }
-
-

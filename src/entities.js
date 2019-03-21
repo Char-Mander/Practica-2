@@ -91,90 +91,59 @@ var Title = function (centerX, centerY) {
 };
 
 Title.prototype = new Sprite();
-//Title.prototype.type = OBJECT_DEATH;
-
-Title.prototype.step = function (dt) {
-  //this.board.remove(this);
-};
+Title.prototype.step = function (dt) { };
 
 
 // PLAYER
 
 var Player = function () {
-  var moving, dx, dy;
+  var hasClicked = false;
 
-  this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 120 });
+  this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 1 });
 
   this.x = Game.width / 2 - this.w / 2;
   this.y = Game.height + this.h / 2;
   this.reload = this.reloadTime;
-  this.frame = 0;
+  this.subFrame = 0;
 
   //Metodo que mantiene a la rana encima del tronco
   this.onTrunk = function (vt) {
     this.enTronco = true;
-    if(!this.moving){
-      this.vx = vt;
-      dx = this.x;
-    }
-
-  }
-
-  this.destinationReached = function () {
-    
-      if((this.vx < 0 && this.x < dx) || (this.vx > 0 && this.x > dx) 
-      || (this.vy < 0 && this.y < dy) || (this.vy > 0 && this.y > dy)){
-        moving = false;
-        this.vx = 0;
-        this.vy = 0;
-        this.subFrame = 0;
-      }
+    this.vx = vt;
   }
 
 
 
   this.step = function (dt) {
-    if (!moving || moving === undefined) {
+    if (this.reload <= 0) {
+
       if (Game.keys['left']) {
-        moving = true;
+
+        this.reload = this.reloadTime;
         this.vx = -this.maxVel;
-        this.vy = 0;
-        dx = this.x - 40;
-        dy = this.y;
-        if (dx < 0) {
-          dx = 0;
-        }
+        this.x -= 40;
 
       }
       else if (Game.keys['right']) {
-        moving = true;
+
+        this.reload = this.reloadTime;
         this.vx = this.maxVel;
-        this.vy = 0;
-        dx = this.x + 40;
-        dy = this.y;
-        if (dx > Game.width - this.w) {
-          dx = Game.width - this.w;
-        }
+        this.x += 40;
+
       }
       else if (Game.keys['down']) {
-        moving = true;
-        this.vx = 0;
+
+        this.reload = this.reloadTime;
         this.vy = -this.maxVel;
-        dx = this.x;
-        dy = this.y - 40;
-        if (dy < 0) {
-          dy = 0;
-        }
+        this.y -= 41.5;
+
       }
       else if (Game.keys['up']) {
-        moving = true;
-        this.vx = 0;
+
+        this.reload = this.reloadTime;
         this.vy = this.maxVel;
-        dx = this.x;
-        dy = this.y + 40;
-        if (dy > Game.height - this.h) {
-          dy = Game.height - this.h;
-        }
+        this.y += 41.5;
+
       }
       else {
         //Booleano que si no esta en el tronco, la x sea la que pulsemos
@@ -182,8 +151,12 @@ var Player = function () {
           this.vx = 0;
         }
 
+        this.vy = 0;
+        this.x += this.vx * dt; //cambiar!!
+        this.y += this.vy;
       }
-      
+
+
       if (this.x < 0) {
         this.x = 0;
         this.subFrame = 0;
@@ -192,7 +165,7 @@ var Player = function () {
         this.x = Game.width - this.w;
         this.subFrame = 0;
       }
-  
+
       if (this.y < 0) {
         this.y = 0;
         this.subFrame = 0;
@@ -202,36 +175,17 @@ var Player = function () {
         this.subFrame = 0;
       }
 
-    }
 
-    
-    
-    this.destinationReached();
 
-    if (moving) {
+
       //Cada vez que hay un step, se resetea el estatus en el tronco
-     // this.enTronco = false;
-      //this.hasClicked = true;
-      this.frame = Math.floor(this.subFrame++ / 4);
-      if (this.subFrame >= 28) {
-        this.subFrame = 0;
-        this.frame = 0;
-      }
-  
-      this.x += parseInt(this.vx * dt);
-      this.y += parseInt(this.vy * dt);
+      this.enTronco = false;
+
+
     }
-    
-
     this.reload -= dt;
-    //Cada vez que hay un step, se resetea el estatus en el tronco
-    this.enTronco = false;
-
-    console.log("Se está moviendo: " + moving);
-    console.log("Coordenadas destino: (" + dx + ", " + dy + ")");
-    console.log("Coordenadas actuales: (" + this.x + ", " + this.y + ")");
-    console.log("Velocidad: (" + this.vx + ", " + this.vy + ")    DT: " + dt);
-    console.log("Si está tocando tronco: " + this.enTronco);
+    this.vx = 0;
+    this.vy = 0;
   }
 
 }
@@ -246,7 +200,6 @@ Player.prototype.hit = function (damage) {
 
   if (this.board.remove(this)) {
     Game.boardLevel2.add(new Death(a, b));
-    //Game.setBoard(1,nuevoboard); //intentar que 
     loseGame();
   }
 
@@ -264,18 +217,15 @@ var Death = function (centerX, centerY) {
 
 Death.prototype = new Sprite();
 Death.prototype.type = OBJECT_DEATH;
-
-Death.prototype.step = function (dt) {
-  //this.board.remove(this);
-};
+Death.prototype.step = function (dt) { };
 
 
 /// CARS
 var cars = {
-  cblue: { x: -50, y: 435, sprite: 'blue_car', health: 10, A: 60 },
-  cgreen: { x: -50, y: 385, sprite: 'green_car', health: 10, A: 50 },
-  cyellow: { x: -50, y: 337, sprite: 'yellow_car', health: 10, A: 70 },
-  vwhite: { x: -50, y: 480, sprite: 'white_van', health: 10, A: 50 },
+  cblue: { x: -90, y: 435, sprite: 'blue_car', health: 10, A: 60 },
+  cgreen: { x: -95, y: 385, sprite: 'green_car', health: 10, A: 50 },
+  cyellow: { x: -95, y: 337, sprite: 'yellow_car', health: 10, A: 70 },
+  vwhite: { x: -125, y: 480, sprite: 'white_van', health: 10, A: 50 },
   vbrown: { x: 550, y: 525, sprite: 'brown_van', health: 10, A: -50 }
 };
 
@@ -311,12 +261,10 @@ Car.prototype.step = function (dt) {
   var collision = this.board.collide(this, OBJECT_PLAYER);
   if (collision) {
     collision.hit(this.damage);
-    //this.board.remove(this); //hay que borrar el TitleScreen que esta en board 3
   }
-
 }
 
-Car.prototype.hit = function (damage) { //El coche solo deberia matar la rana
+Car.prototype.hit = function (damage) {
   this.health -= damage;
 
   Game.board.add(new Death(this.x + this.w / 2,
@@ -330,14 +278,14 @@ Car.prototype.hit = function (damage) { //El coche solo deberia matar la rana
   }
 }
 
+
 /// TRUNK (TRONCOS)
 var trunks = {    //A: movimiento horizontal
-  swood: { x: 0, y: 250, sprite: 'small_wood', health: 20, A: 40 }, //50
-  mwood: { x: 550, y: 50, sprite: 'medium_wood', health: 10, A: -30 }, //-30
-  lwood: { x: 0, y: 150, sprite: 'large_wood', health: 10, A: 35 },//40
-  turtle1: { x: 0, y: 200, sprite: 'turtle', health: 10, A: 35 },//20
-  turtle2: { x: 0, y: 100, sprite: 'turtle', health: 10, A: 40 }//40
-
+  swood: { x: -130, y: 250, sprite: 'small_wood', health: 20, A: 40 },
+  mwood: { x: 550, y: 50, sprite: 'medium_wood', health: 10, A: -30 },
+  lwood: { x: -247, y: 150, sprite: 'large_wood', health: 10, A: 35 },
+  turtle1: { x: -40, y: 200, sprite: 'turtle', health: 10, A: 35 },
+  turtle2: { x: -40, y: 100, sprite: 'turtle', health: 10, A: 40 }
 };
 
 
@@ -379,7 +327,6 @@ Trunk.prototype.step = function (dt) {
 //WATER
 
 var Water = function () {
-  //Rango: 0-618x270 hay agua
   this.setup('water', { vx: 0, frame: 0, reloadTime: 0, maxVel: 0 });
   this.x = 0;
   this.y = 50;
@@ -389,18 +336,14 @@ Water.prototype = new Sprite();
 Water.prototype.type = OBJECT_WATER;
 
 Water.prototype.step = function (dt) {
-  //Si player toca el agua
   var collision = this.board.collide(this, OBJECT_PLAYER);
 
   if (collision)
     if (!collision.enTronco)
       collision.hit(this.damage);
-
 }
 
-Water.prototype.hit = function (damage) {
-
-}
+Water.prototype.hit = function (damage) { }
 
 //HOME
 
@@ -411,7 +354,6 @@ var Home = function () {
 }
 
 Home.prototype = new Sprite();
-//Water.prototype.type = OBJECT_WATER;
 
 Home.prototype.step = function (dt) {
   var collision = this.board.collide(this, OBJECT_PLAYER);

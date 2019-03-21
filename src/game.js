@@ -8,7 +8,7 @@ var startGame = function() {
 
   boardIni = new GameBoard();
   boardIni.add(new TitleScreen("", 
-                                  "Press space to start playing",
+                                  "Press fire to start playing",
                                   playGame));
   boardIni.add(new Title(150,150)); //Pinta sprite del titulo
 
@@ -36,7 +36,7 @@ var playGame = function() {
 
 var winGame = function() {
   boardLevel2.add(new TitleScreen("You win!", 
-                                  "Press space to play again",
+                                  "Press fire to play again",
                                   playGame));
     Game.setBoard(2,boardLevel2);
 };
@@ -45,7 +45,7 @@ var winGame = function() {
 
 var loseGame = function() {
   boardLevel2.add(new TitleScreen("You lose!", 
-                                  "Press space to play again",
+                                  "Press fire to play again",
                                   playGame));
 
   Game.setBoard(2,boardLevel2);
