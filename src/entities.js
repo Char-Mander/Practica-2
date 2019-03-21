@@ -108,7 +108,7 @@ var Player = function () {
   this.x = Game.width / 2 - this.w / 2;
   this.y = Game.height + this.h / 2;
   this.reload = this.reloadTime;
-  this.subFrame = 0;
+  this.frame = 0;
 
   //Metodo que mantiene a la rana encima del tronco
   this.onTrunk = function (vt) {
@@ -129,9 +129,10 @@ var Player = function () {
 */
       if((this.vx < 0 && this.x < dx) || (this.vx > 0 && this.x > dx) 
       || (this.vy < 0 && this.y < dy) || (this.vy > 0 && this.y > dy)){
-      moving = false;
+        moving = false;
         this.vx = 0;
         this.vy = 0;
+        this.subFrame = 0;
       }
   }
 
@@ -158,14 +159,14 @@ var Player = function () {
         this.vx = 0;
         this.vy = -this.maxVel;
         dx = this.x;
-        dy = this.y + 40;
+        dy = this.y - 40;
       }
       else if (Game.keys['up']) {
         moving = true;
         this.vx = 0;
         this.vy = this.maxVel;
         dx = this.x;
-        dy = this.y - 40;
+        dy = this.y + 40;
       }
       else {
         //Booleano que si no esta en el tronco, la x sea la que pulsemos
@@ -173,7 +174,7 @@ var Player = function () {
           this.vx = 0;
         }
 
-        this.vy = 0;
+        //this.vy = 0;
         //Cada vez que hay un step, se resetea el estatus en el tronco
         this.enTronco = false;
         //this.x += this.vx*dt; //cambiar!!
@@ -188,7 +189,6 @@ var Player = function () {
     }
     else if (this.x > Game.width - this.w) {
       this.x = Game.width - this.w;
-      dx = this.x;
       this.subFrame = 0;
     }
 
@@ -198,27 +198,27 @@ var Player = function () {
       this.subFrame = 0;
     }
     else if (this.y > Game.height - this.h) {
-      this.y = Game.height - this.h;
+      this.y = Game.height - this.h - 1;
       dy = this.y;
       this.subFrame = 0;
     }
-
+    
+    this.destinationReached();
+    
     if (moving) {
       //Cada vez que hay un step, se resetea el estatus en el tronco
-      //this.enTronco = false;
+      this.enTronco = false;
       //this.hasClicked = true;
-      this.frame = Math.floor(this.subFrame++ / 3);
-      if (this.subFrame >= 21) {
+      this.frame = Math.floor(this.subFrame++ / 5);
+      if (this.subFrame >= 35) {
         this.subFrame = 0;
+        this.frame = 0;
       }
       console.log("Llega a donde se cambian las coordenadas");
       this.x += parseInt(this.vx * dt);
       this.y += parseInt(this.vy * dt);
     }
-    /*else  {
-      this.vx = 0;
-      this.vy = 0;
-    }*/
+    
 
     this.reload -= dt;
     console.log("Se está moviendo: " + moving);
