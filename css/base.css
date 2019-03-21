@@ -1,3 +1,8 @@
+/* Color the body */
+body{
+  background-color: rgb(138, 218, 211);
+}
+
 /* Center the container */
 #container {
   padding-top:50px;

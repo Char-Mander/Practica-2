@@ -1,37 +1,54 @@
-/*
+
+var boardIni; //Board nivel 0
+var board; //Board de fondo nivel 1
+var boardLevel2; //Variable para guardar el objeto del tablero que muestra los titlescreen y la calavera
+
 // Especifica lo que se debe pintar al cargar el juego
-var startGame = function() {
-  Game.setBoard(0,new TitleScreen("Frogger", 
+var startGame = function() { 
+
+  boardIni = new GameBoard();
+  boardIni.add(new TitleScreen("", 
                                   "Press fire to start playing",
                                   playGame));
+  boardIni.add(new Title(150,150)); //Pinta sprite del titulo
+
+  Game.setBoard(0,boardIni);
 }
-*/
+
 
 var playGame = function() {
+  var orden = [new Water(), new Home(), new Spawner(objetos), new Player()];
 
-  /*Game.setBoard(0,new Starfield(20,0.4,100,true))
-  Game.setBoard(1,new Starfield(50,0.6,100))
-  Game.setBoard(2,new Starfield(100,1.0,50));*/
+  boardIni = new GameBoard();
+  boardIni.add(new Background());
+  Game.setBoard(0,boardIni); //Pantalla de juego
+  board = new GameBoard(); //Fondo para background y coches, tronco, rana...
 
-  var board = new Background();
-  //board.add(new Level(level1,winGame));
-  Game.setBoard(0,board);
-  Game.setBoard(1, new PlayerShip());
-  
+  //Crea el fondo (nivel 2) que contendra la calavera si pierde y los mensajes win o lose
+  boardLevel2 = new GameBoard();
+  Game.setBoard(2,boardLevel2);//Resetea el fondo 2
+
+  for(var i = 0, len = orden.length; i < len; i++)
+    board.add(orden[i]);
+
+  Game.setBoard(1,board);
 }
 
 var winGame = function() {
-  Game.setBoard(3,new TitleScreen("You win!", 
+  boardLevel2.add(new TitleScreen("You win!", 
                                   "Press fire to play again",
                                   playGame));
+    Game.setBoard(2,boardLevel2);
 };
 
 
 
 var loseGame = function() {
-  Game.setBoard(3,new TitleScreen("You lose!", 
+  boardLevel2.add(new TitleScreen("You lose!", 
                                   "Press fire to play again",
                                   playGame));
+
+  Game.setBoard(2,boardLevel2);
 };
 
 
@@ -40,5 +57,5 @@ var loseGame = function() {
 // y este después de realizar la inicialización llamará a
 // startGame
 window.addEventListener("load", function() {
-  Game.initialize("game",sprites,playGame);
+  Game.initialize("game",sprites,startGame);
 });
