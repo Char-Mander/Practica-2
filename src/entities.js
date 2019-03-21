@@ -103,7 +103,7 @@ Title.prototype.step = function (dt) {
 var Player = function () {
   var moving, dx, dy;
 
-  this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 1 });
+  this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 100 });
 
   this.x = Game.width / 2 - this.w / 2;
   this.y = Game.height + this.h / 2;
@@ -122,16 +122,23 @@ var Player = function () {
   }
 
   this.destinationReached = function () {
-    if(((this.x === dx && this.y === dy) || (this.x + 1 == dx && this.y === dy)
+    /*if(((this.x === dx && this.y === dy) || (this.x + 1 == dx && this.y === dy)
       || (this.x - 1 == dx && this.y === dy) || (this.x === dx && this.y + 1 === dy)
       || (this.x === dx && this.y - 1 === dy)))
       moving = false;
+*/
+      if((this.vx < 0 && this.x < dx) || (this.vx > 0 && this.x > dx) 
+      || (this.vy < 0 && this.y < dy) || (this.vy > 0 && this.y > dy)){
+      moving = false;
+        this.vx = 0;
+        this.vy = 0;
+      }
   }
 
 
 
   this.step = function (dt) {
-    if (moving === false|| moving === undefined) {
+    if (!moving || moving === undefined) {
       if (Game.keys['left']) {
         moving = true;
         this.vx = -this.maxVel;
@@ -162,11 +169,8 @@ var Player = function () {
       }
       else {
         //Booleano que si no esta en el tronco, la x sea la que pulsemos
-        if (!this.enTronco && !moving) {
+        if (!this.enTronco) {
           this.vx = 0;
-        }
-        else if(this.enTronco){
-          this.vx = vt;
         }
 
         this.vy = 0;
@@ -179,19 +183,23 @@ var Player = function () {
 
     if (this.x < 0) {
       this.x = 0;
+      dx = this.x;
       this.subFrame = 0;
     }
     else if (this.x > Game.width - this.w) {
       this.x = Game.width - this.w;
+      dx = this.x;
       this.subFrame = 0;
     }
 
     if (this.y < 0) {
       this.y = 0;
+      dy = this.y;
       this.subFrame = 0;
     }
     else if (this.y > Game.height - this.h) {
       this.y = Game.height - this.h;
+      dy = this.y;
       this.subFrame = 0;
     }
 
