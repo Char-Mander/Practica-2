@@ -30,17 +30,19 @@ var sprites = {
 
   title: { sx: 8, sy: 395, w: 261, h: 164, frames: 1 },
   background: { sx: 421, sy: 0, w: 550, h: 625, frames: 1 },
+  water: { sx: 421, sy: 55, w: 615, h: 242, frames: 1 },
+
 };
 
 var OBJECT_PLAYER = 1,
-  OBJECT_PLAYER_PROJECTILE = 2,
+  OBJECT_DEATH = 2,
   OBJECT_CAR = 4,
-  OBJECT_ENEMY_PROJECTILE = 8,
-  OBJECT_POWERUP = 16,
-  OBJECT_BACKGROUND = 32,
-  OBJECT_TRUNK = 64;
+  OBJECT_BACKGROUND = 8,
+  OBJECT_TRUNK = 16,
+  OBJECT_WATER = 32;
 
-
+//Se resetea el valor al final de step de Player
+var enTronco = false; //Para saber si esta en el tronco
 
 
 /// CLASE PADRE SPRITE
@@ -85,8 +87,7 @@ Background.prototype.step = function () { };
 
 var Player = function () {
   var moving, dx, dy;
-  //Declararlo fuera, lo pongo a false en trunk
-  var enTronco = false; //Para saber si esta en el tronco
+
   this.setup('frog_move', { vx: 0, vy: 0, frame: 0, reloadTime: 0.25, maxVel: 150 });
 
   this.x = Game.width / 2 - this.w / 2;
@@ -110,14 +111,14 @@ var Player = function () {
         dx = this.x - 40;
         dy = this.y;
 
-        if(dx < 0){
+        if (dx < 0) {
           dx = 0;
         }
 
         this.vx = -this.maxVel;
         this.vy = 0;
-        
-       // this.x += parseInt(this.vx * dt);
+
+        // this.x += parseInt(this.vx * dt);
       }
     }
     else if (Game.keys['right']) {
@@ -126,13 +127,13 @@ var Player = function () {
         dx = this.x + 40;
         dy = this.y;
 
-        if(dx > 510){
+        if (dx > 510) {
           dx = 510;
         }
 
         this.vx = this.maxVel;
         this.vy = 0;
-      //  this.x += parseInt(this.vx * dt);
+        //  this.x += parseInt(this.vx * dt);
       }
     }
     else if (Game.keys['down']) {
@@ -140,14 +141,14 @@ var Player = function () {
         moving = true;
         dx = this.x;
         dy = this.y - 40;
-        
-        if(dy < 0){
+
+        if (dy < 0) {
           dy = 0;
         }
 
         this.vx = 0;
         this.vy = -this.maxVel;
-       // this.y += parseInt(this.vy * dt);
+        // this.y += parseInt(this.vy * dt);
       }
     }
     else if (Game.keys['up']) {
@@ -156,47 +157,28 @@ var Player = function () {
         dx = this.x;
         dy = this.y + 40;
 
-        if(dy > 585){
+        if (dy > 585) {
           dy = 585;
         }
 
         this.vx = 0;
         this.vy = this.maxVel;
-      //  this.y += parseInt(this.vy * dt);
-        
+        //  this.y += parseInt(this.vy * dt);
+
       }
     }
     else {
       //Booleano que si no esta en el tronco, la x sea la que pulsemos
-      if (!this.enTronco && !moving)
+      if (!this.enTronco) {
         this.vx = 0;
-      
-        
-      if ((this.x === dx && this.y === dy) || (this.x + 1 == dx && this.y === dy ) 
-      || (this.x - 1 == dx && this.y === dy ) || (this.x === dx && this.y + 1 === dy) 
-      || (this.x === dx && this.y - 1 === dy)) {
-         moving = false;
-         this.vx = 0;
-         this.vy = 0;
-         this.frame = 0;
-         this.subFrame = 0;
-       }
-       
-       
-       if(this.y === 1){
-         winGame();
-       }
-
-      if (moving) {
-        this.frame = Math.floor(this.subFrame++ / 3);
-         if (this.subFrame >= 21) {
-           this.subFrame = 0;
-         }
-        this.x += parseInt(this.vx * dt);
-        this.y += parseInt(this.vy * dt);
       }
 
+      this.vy = 0;
+      this.x += this.vx * dt;
+      this.y += this.vy * dt;
     }
+
+
 
     if (this.x < 0) {
       this.x = 0;
@@ -217,17 +199,9 @@ var Player = function () {
     }
 
     this.reload -= dt;
-    console.log("Se está moviendo: " + moving);
-    console.log("Coordenadas destino: (" + dx + ", " + dy + ")");
-    console.log("Coordenadas actuales: (" + this.x + ", " + this.y + ")");
-    console.log("Velocidad: (" + this.vx + ", " + this.vy + ")");
-    if (!this.enTronco && !moving)
-        this.vx = 0;
+    //Cada vez que hay un step, se resetea el estatus en el tronco
+    this.enTronco = false;
   }
-
-
-
-
 
 }
 
@@ -243,24 +217,22 @@ Player.prototype.hit = function (damage) {
 
 ///// DEAD
 
-var Dead = function (centerX, centerY) {
+var Death = function (centerX, centerY) {
   this.setup('orange_skull', { frame: 0 });
   this.x = centerX - this.w / 2;
   this.y = centerY - this.h / 2;
   this.subFrame = 0;
 };
 
-Dead.prototype = new Sprite();
+Death.prototype = new Sprite();
+Death.prototype.type = OBJECT_DEATH;
 
-Dead.prototype.step = function (dt) {
+Death.prototype.step = function (dt) {
   //this.board.remove(this);
-
 };
 
 
-/// CARs
-//E: movimiento vertical.
-//A: movimiento horizontal
+/// CARS
 var cars = {
   cblue: { x: -50, y: 435, sprite: 'blue_car', health: 10, A: 60 },
   cgreen: { x: -50, y: 385, sprite: 'green_car', health: 10, A: 50 },
@@ -307,22 +279,25 @@ Car.prototype.step = function (dt) {
 
 Car.prototype.hit = function (damage) {
   this.health -= damage;
+  //var die = new Death(this.x + this.w/2,this.y + this.h / 2);
+  //die.draw(ctx);
+  //this.board.add(die);
   if (this.health <= 0) {
     if (this.board.remove(this)) {
-      this.board.add(new Dead(this.x + this.w / 2,
+
+      this.board.add(new Death(this.x + this.w / 2,
         this.y + this.h / 2));
     }
   }
 }
 
 /// TRUNK (TRONCOS)
-//A: movimiento horizontal
-var trunks = {
-  swood: { x: 0, y: 250, sprite: 'small_wood', health: 20, A: 50 },
-  mwood: { x: 550, y: 50, sprite: 'medium_wood', health: 10, A: -30 },
-  lwood: { x: 0, y: 150, sprite: 'large_wood', health: 10, A: 40 },
-  turtle1: { x: 0, y: 200, sprite: 'turtle', health: 10, A: 20 },
-  turtle2: { x: 0, y: 100, sprite: 'turtle', health: 10, A: 40 }
+var trunks = {    //A: movimiento horizontal
+  swood: { x: 0, y: 250, sprite: 'small_wood', health: 20, A: 10 }, //50
+  mwood: { x: 550, y: 50, sprite: 'medium_wood', health: 10, A: -10 }, //-30
+  lwood: { x: 0, y: 150, sprite: 'large_wood', health: 10, A: 15 },//40
+  turtle1: { x: 0, y: 200, sprite: 'turtle', health: 10, A: 15 },//20
+  turtle2: { x: 0, y: 100, sprite: 'turtle', health: 10, A: 10 }//40
 
 };
 
@@ -358,8 +333,48 @@ Trunk.prototype.step = function (dt) {
   var collision = this.board.collide(this, OBJECT_PLAYER);
   if (collision) {
     Game.frogP.onTrunk(this.vx);
-  } else
-    this.enTronco = false;
+  }
+}
+
+
+//WATER
+
+var agua = {
+  a: { x: 0, y: 50, sprite: 'water', health: 20 },
+}
+//Idea: pintar el agua por encima del background
+var Water = function () {
+  //Rango: 0-618x270 hay agua
+  this.setup('water', { vx: 0, frame: 0, reloadTime: 0, maxVel: 0 });
+  this.x = 0;
+  this.y = 52;
+}
+
+Water.prototype = new Sprite();
+Water.prototype.type = OBJECT_WATER;
+
+Water.prototype.step = function (dt) {
+  //Si player toca el agua
+  var collision = this.board.collide(this, OBJECT_PLAYER);
+  var collisionTrunk = this.board.collide(OBJECT_PLAYER, OBJECT_TRUNK);
+
+  if (collision)
+    if (!collisionTrunk)
+      collision.hit(this.damage);
 
 }
+
+Water.prototype.hit = function (damage) {
+  this.health -= damage;
+  if (this.health <= 0) {
+    if (this.board.remove(this)) {
+      this.board.add(new Dead(this.x + this.w / 2,
+        this.y + this.h / 2));
+    }
+  }
+}
+
+
+
+
 
