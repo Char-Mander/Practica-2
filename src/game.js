@@ -8,7 +8,7 @@ var startGame = function() {
 
   boardIni = new GameBoard();
   boardIni.add(new TitleScreen("", 
-                                  "Press fire to start playing",
+                                  "Press space to start playing",
                                   playGame));
   boardIni.add(new Title(150,150)); //Pinta sprite del titulo
 
@@ -17,7 +17,7 @@ var startGame = function() {
 
 
 var playGame = function() {
-  var orden = [new Spawner(objetos), new Water(), new Home(), new Player()];
+  var orden = [new Water(), new Home(), new Spawner(objetos), new Player()];
 
   boardIni = new GameBoard();
   boardIni.add(new Background());
@@ -28,23 +28,15 @@ var playGame = function() {
   boardLevel2 = new GameBoard();
   Game.setBoard(2,boardLevel2);//Resetea el fondo 2
 
- /* board.add(new Spawner(objetos));
-
-  board.add(new Water());
-  board.add(new Home());
-
-  Game.frogP = new Player();
-  board.add(Game.frogP);*/
   for(var i = 0, len = orden.length; i < len; i++)
     board.add(orden[i]);
 
   Game.setBoard(1,board);
-  //Game.setBoard(2,new Spawner(coches,winGame)); //Crea el nivel con los enemigos  
 }
 
 var winGame = function() {
   boardLevel2.add(new TitleScreen("You win!", 
-                                  "Press fire to play again",
+                                  "Press space to play again",
                                   playGame));
     Game.setBoard(2,boardLevel2);
 };
@@ -53,7 +45,7 @@ var winGame = function() {
 
 var loseGame = function() {
   boardLevel2.add(new TitleScreen("You lose!", 
-                                  "Press fire to play again",
+                                  "Press space to play again",
                                   playGame));
 
   Game.setBoard(2,boardLevel2);

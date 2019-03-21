@@ -5,14 +5,14 @@
 //Gap: tiempo de espera entre uno y otro
 var objetos = [
  // Start,    End, Gap,  Type,   Override
-  [ 0,       4000, 7000, 'cblue' ],
-  [ 0,   13000, 6000, 'cgreen' ],
-  [ 0,  16000, 8000, 'cyellow' ],
+  [ 0,       4000, 7000, 'cblue'],
+  [ 0,   13000, 6000, 'cgreen'],
+  [ 0,  16000, 8000, 'cyellow'],
   [ 0,  20000, 5000, 'vwhite'],
   [ 0,  20000, 7500, 'vbrown'],
-  [ 0,   4000, 4000, 'swood' ],
-  [ 0,   13000, 7000, 'mwood' ],
-  [ 0,  16000, 8500, 'lwood' ],
+  [ 0,   4000, 4000, 'swood'],
+  [ 0,   13000, 7000, 'mwood'],
+  [ 0,  16000, 8500, 'lwood'],
   [ 0,  20000, 4500, 'turtle1'],
   [ 0,  20000, 8000, 'turtle2']
 ];
